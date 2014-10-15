@@ -44,7 +44,7 @@
     - { role: base }
     - { role: client, subscriptions: "\"common\",\"master\"" }
 
-- hosts: master, multi-node-master, worker
+- hosts: master
   sudo: True
   tasks:
   # this seems like the wrong place for this, but not sure what the best place for it is if we cannot redistribute 
