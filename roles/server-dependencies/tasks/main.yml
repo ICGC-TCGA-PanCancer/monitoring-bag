@@ -40,7 +40,7 @@
 - name: Enable management console
   command: rabbitmq-plugins enable rabbitmq_management
   register: enable_console 
-  changed_when: "enable_console.stdout.find('Plugin configuration unchanged.') != -1"
+  changed_when: False
   notify: restart rabbitmq 
 
 - name: Start RabbitMQ on boot
@@ -58,11 +58,11 @@
   command: rabbitmqctl set_user_tags sensu administrator
   ignore_errors: yes 
   register: add_user_result
-  changed_when: "add_user_result.rc != 2"
+  changed_when: False
 
 - name: Set permissions
   command: rabbitmqctl set_permissions -p /sensu sensu ".*" ".*" ".*"  
   ignore_errors: yes 
   register: add_permissions_result
-  changed_when: "add_permissions_result.rc != 2"
+  changed_when: False
 
