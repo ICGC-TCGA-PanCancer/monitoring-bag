@@ -20,8 +20,8 @@
 
 - name: Template over rabbit connector config
   template: src=rabbitmq.json.j2 dest=/etc/sensu/conf.d/rabbitmq.json
-  # I had to comment out this, clients also have a base and will die if they try to restart rabbitmq
-  #  notify: restart rabbitmq
+  # Only the sensu client needs to be restarted
+  notify: restart sensu-client
   
 - name: Template over embedded ruby config
   template: src=sensu.j2 dest=/etc/default/sensu

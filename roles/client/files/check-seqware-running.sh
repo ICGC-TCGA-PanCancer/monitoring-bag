@@ -32,10 +32,11 @@ days_clean=`echo "${days: -1}"`
 
 if [ $days_clean == "d" ]
 	then days=`echo "${first: 0:1}"` 
-		if [ $days -gt 3 ]
+		if [ $days -gt {{ total_max_workflow_duration }} ]
 			then echo "The job has been running for more than $days days, please investigate!"
 			exit 2
-		else
+		else 
+
   			echo "All seqware jobs are fine."
     			exit 0
 		fi
