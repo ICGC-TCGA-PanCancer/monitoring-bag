@@ -1,9 +1,10 @@
 #!/bin/sh
 #
-# It looks for jobs that have been running for too long
+# It alerts if there are no workflows running, or if there are any workflows that have been running for too long
+#set -x
 
 # First, get the jobID, status and run time
-jobid=`sudo -u seqware_user -i /home/seqware/bin/seqware workflow report --accession 2 | grep -B1 -A18 running | egrep "Run SWID|Run Status|Run Time"`
+jobid=`sudo -u seqware -i /home/seqware/bin/seqware workflow report --accession 2 | grep -B1 -A18 running | egrep "Run SWID|Run Status|Run Time"`
 
 # Still to do
 # The running jobs should be investigated further to see if they have been running longer than a parameterized threshold
@@ -25,19 +26,24 @@ jobid=`sudo -u seqware_user -i /home/seqware/bin/seqware workflow report --acces
 # step4_job_time:  12h
 #....
 
-#Workflow Run Engine ID
+if [ -z $jobid ]
+	then 
+		echo "There are no jobs running, please investigate why!"
+		exit 2
+	else
+		days=`echo $jobid | grep "Run Time"| awk -F":" '{print $2}'| awk '{print $1}'`
+		days_clean=`echo "${days: -1}"`
 
-days=`echo $jobid | grep "Run Time"| awk -F":" '{print $2}'| awk '{print $1}'`
-days_clean=`echo "${days: -1}"`
-
-if [ $days_clean == "d" ]
-	then days=`echo "${first: 0:1}"` 
-		if [ $days -gt {{ total_max_workflow_duration }} ]
-			then echo "The job has been running for more than $days days, please investigate!"
-			exit 2
-		else 
-
-  			echo "All seqware jobs are fine."
-    			exit 0
+		if [ $days_clean == "d" ]
+			then days=`echo "${first: 0:1}"` 
+				if [ $days -gt 3 ]
+					then echo "The job has been running for more than $days days, please investigate!"
+					exit 2
+				else
+  					echo "All seqware jobs are fine."
+    					exit 0
+				fi
 		fi
+
 fi
+
