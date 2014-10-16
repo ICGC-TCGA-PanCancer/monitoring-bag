@@ -104,13 +104,16 @@
     mode=755
   notify: restart sensu-client
 
+- name: Template over check-seqware-running.sh
+  template: src=check-seqware-running.json.j2 dest=/etc/sensu/plugins/check-seqware-running.sh mode=0755
+  notify: restart sensu-client
+
 - name: Copy over Gluster peer status check
   copy: src={{ item }} dest=/etc/sensu/plugins/ mode=0755
   with_items:
      - check-gluster.sh
      - check-qstat.sh
      - check-seqware-failed.sh
-     - check-seqware-running.sh
   notify: restart sensu-client
 
 - name: Activate client services
