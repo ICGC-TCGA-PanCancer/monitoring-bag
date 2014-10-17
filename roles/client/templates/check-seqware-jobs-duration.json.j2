@@ -1,0 +1,19 @@
+#!/bin/bash
+#set -x
+for workflow in `sudo -u seqware -i /home/seqware/bin/seqware workflow report --accession 2 | grep -A 4 -B 1 running| grep 'Workflow Run Engine ID'| awk -F"|" '{print $2}'`;\
+do \
+for step in `oozie job -info $workflow -oozie http://localhost:11000/oozie | grep RUNNING| grep 0000| awk -F"@" '{print $2}'| awk '{print $3}'`;\
+do \
+startlong=`qstat -f | grep $step| awk '{print $6, $7}'`;\
+startshort=`date -d "$startlong" +"%s"`;\
+curtime=`date +%s`;\
+diff=$(($curtime-startshort));\
+hours=$((diff / 3600));\
+step_name=`qstat -f | grep $step| awk '{print $3}'`
+
+if [ $hours -gt 10 ]
+        then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+fi; 
+done
+done
+
