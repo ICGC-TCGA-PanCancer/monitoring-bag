@@ -2,8 +2,8 @@
   "checks": {
     "interface_metrics": {
       "type": "metric",
-      "command": "interface-metrics.rb -x lo",
-      "interval": 10,
+      "command": "interface-metrics.rb -x lo --scheme :::client.name:::",
+      "interval": 60,
       "subscribers": ["common"],
       "handlers": ["relay"]
     }

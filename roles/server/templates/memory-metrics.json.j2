@@ -2,8 +2,8 @@
   "checks": {
     "memory-metrics": {
       "type": "metric",
-      "command": "memory-metrics.rb",
-      "interval": 10,
+      "command": "memory-metrics.rb --scheme :::client.name:::",
+      "interval": 60,
       "subscribers": ["common"],
       "handlers": ["relay"]
     }
