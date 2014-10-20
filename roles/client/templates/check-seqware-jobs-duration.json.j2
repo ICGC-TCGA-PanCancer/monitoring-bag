@@ -6,17 +6,18 @@ gtdownload={{ gtdownload }}
 mergeBAM={{ mergeBAM }}
 unmappedReads={{ unmappedReads }}
 upload={{ upload }}
+accession={{ accession }}
 
-for workflow in `sudo -u seqware -i /home/seqware/bin/seqware workflow report --accession 2 | grep -A 4 -B 1 running| grep 'Workflow Run Engine ID'| awk -F"|" '{print $2}'`;\
+for workflow in `sudo -u seqware -i /home/seqware/bin/seqware workflow report --accession $accession | grep -A 4 -B 1 running| grep 'Workflow Run Engine ID'| awk -F"|" '{print $2}'`;\
 do \
 	for step in `oozie job -info $workflow -oozie http://localhost:11000/oozie | grep RUNNING| grep 0000| awk -F"@" '{print $2}'| awk '{print $3}'`;\
 	do \
-		startlong=`qstat -f | grep $step| awk '{print $6, $7}'`;\
+		startlong=`sudo -u seqware -i /usr/bin/qstat -f | grep $step| awk '{print $6, $7}'`;\
 		startshort=`date -d "$startlong" +"%s"`;\
 		curtime=`date +%s`;\
 		diff=$(($curtime-startshort));\
 		hours=$((diff / 3600));\
-		step_name=`qstat -f | grep $step| awk '{print $3}'`
+		step_name=`sudo -u seqware -i /usr/bin/qstat -f | grep $step| awk '{print $3}'`
 		
 		case $step_name in
 			bam*)	if [ $hours -gt $bam_stats ]
