@@ -1,3 +1,14 @@
 ---
 subscriptions: "compute"
+# The folowing values are good for AWS, please change them for other envronments
+
+# total_max_workflow_duration is the total duration allowed for a workflow, in DAYS
 total_max_workflow_duration: 8
+
+# The values for individual steps in a workflow are specified in HOURS
+bam_stats: 5
+bwa_mem: 25
+gtdownload: 3
+mergeBAM: 18
+unmappedReads: 3
+upload: 10
