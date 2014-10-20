@@ -1,19 +1,62 @@
 #!/bin/bash
 #set -x
+bam_stats={{ bam_stats }}
+bwa_mem={{ bwa_mem }}
+gtdownload={{ gtdownload }}
+mergeBAM={{ mergeBAM }}
+unmappedReads={{ unmappedReads }}
+upload={{ upload }}
+
 for workflow in `sudo -u seqware -i /home/seqware/bin/seqware workflow report --accession 2 | grep -A 4 -B 1 running| grep 'Workflow Run Engine ID'| awk -F"|" '{print $2}'`;\
 do \
-for step in `oozie job -info $workflow -oozie http://localhost:11000/oozie | grep RUNNING| grep 0000| awk -F"@" '{print $2}'| awk '{print $3}'`;\
-do \
-startlong=`qstat -f | grep $step| awk '{print $6, $7}'`;\
-startshort=`date -d "$startlong" +"%s"`;\
-curtime=`date +%s`;\
-diff=$(($curtime-startshort));\
-hours=$((diff / 3600));\
-step_name=`qstat -f | grep $step| awk '{print $3}'`
-
-if [ $hours -gt 10 ]
-        then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
-fi; 
+	for step in `oozie job -info $workflow -oozie http://localhost:11000/oozie | grep RUNNING| grep 0000| awk -F"@" '{print $2}'| awk '{print $3}'`;\
+	do \
+		startlong=`qstat -f | grep $step| awk '{print $6, $7}'`;\
+		startshort=`date -d "$startlong" +"%s"`;\
+		curtime=`date +%s`;\
+		diff=$(($curtime-startshort));\
+		hours=$((diff / 3600));\
+		step_name=`qstat -f | grep $step| awk '{print $3}'`
+		
+		case $step_name in
+			bam*)	if [ $hours -gt $bam_stats ]
+        				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+					else echo "No problems detected."
+					exit 0
+				fi 
+			;;
+			bwa*)	if [ $hours -gt $bwa_mem ]
+        				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+					else echo "No problems detected."
+					exit 0
+				fi 
+			;;
+			gtdownload*)	if [ $hours -gt $gtdownload ]
+        				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+					else echo "No problems detected."
+					exit 0
+				fi 
+			;;
+			merge*)	if [ $hours -gt $mergeBAM ]
+        				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+					else echo "No problems detected."
+					exit 0
+				fi 
+			;;
+			unmappedReads*)	if [ $hours -gt $unmappedReads ]
+        				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+					else echo "No problems detected."
+					exit 0
+				fi 
+			;;
+			upload*)	if [ $hours -gt $upload ]
+        				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+					else echo "No problems detected."
+					exit 0
+				fi 
+			;;
+			*)  echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+			;;
+		esac
+	done
 done
-done
-
