@@ -22,41 +22,48 @@ do \
 		case $step_name in
 			bam*)	if [ $hours -gt $bam_stats ]
         				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+					exit 2
 					else echo "No problems detected."
 					exit 0
 				fi 
 			;;
 			bwa*)	if [ $hours -gt $bwa_mem ]
         				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+					exit 2
 					else echo "No problems detected."
 					exit 0
 				fi 
 			;;
 			gtdownload*)	if [ $hours -gt $gtdownload ]
         				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+					exit 2
 					else echo "No problems detected."
 					exit 0
 				fi 
 			;;
 			merge*)	if [ $hours -gt $mergeBAM ]
         				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+					exit 2
 					else echo "No problems detected."
 					exit 0
 				fi 
 			;;
 			unmappedReads*)	if [ $hours -gt $unmappedReads ]
         				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+					exit 2
 					else echo "No problems detected."
 					exit 0
 				fi 
 			;;
 			upload*)	if [ $hours -gt $upload ]
         				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+					exit 2
 					else echo "No problems detected."
 					exit 0
 				fi 
 			;;
 			*)  echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours"
+					exit 2
 			;;
 		esac
 	done
