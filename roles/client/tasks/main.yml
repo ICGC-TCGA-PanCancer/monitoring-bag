@@ -108,6 +108,10 @@
   template: src=check-seqware-running.json.j2 dest=/etc/sensu/plugins/check-seqware-running.sh mode=0755
   notify: restart sensu-client
 
+- name: Template over check-seqware-jobs-duration.sh
+  template: src=check-seqware-jobs-duration.json.j2 dest=/etc/sensu/plugins/check-seqware-jobs-duration.sh mode=0755
+  notify: restart sensu-client
+
 - name: Copy over Gluster peer status check
   copy: src={{ item }} dest=/etc/sensu/plugins/ mode=0755
   with_items:
