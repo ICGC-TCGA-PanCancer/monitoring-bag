@@ -8,6 +8,23 @@
   apt: name=rubygems state=latest
   when: ansible_distribution_release == "precise"
 
+- name: Install sysstat
+  apt: name=sysstat state=latest
+
+- name: Enable sysstat to collect data
+  lineinfile:
+    dest=/etc/default/sysstat
+    state=present
+    regexp='^ENABLED="false"'
+    line='ENABLED="true"'
+
+- name: Tell sysstat to collect data every min
+  lineinfile:
+    dest=/etc/cron.d/sysstat
+    state=present
+    regexp='^5-55/10'
+    line='* * * * * root command -v debian-sa1 > /dev/null && debian-sa1 1 1'
+
 - name: Install ruby
   apt: name=ruby state=latest
   when: ansible_distribution_release == "trusty"
@@ -49,6 +66,13 @@
   get_url: 
     dest=/etc/sensu/plugins/disk-usage-metrics.rb 
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/system/disk-usage-metrics.rb
+    mode=755
+  notify: restart sensu-client
+
+- name: Install iostat metrics
+  get_url: 
+    dest=/etc/sensu/plugins/iostat-extended-metrics.rb
+    url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/system/iostat-extended-metrics.rb
     mode=755
   notify: restart sensu-client
 

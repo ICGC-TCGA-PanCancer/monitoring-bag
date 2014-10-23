@@ -1,0 +1,11 @@
+{
+  "checks": {
+    "iostat_metrics": {
+      "type": "metric",
+      "command": "iostat-extended-metrics.rb --scheme :::client.name:::",
+      "interval": 60,
+      "subscribers": ["common"],
+      "handlers": ["relay"]
+    }
+  }
+}
