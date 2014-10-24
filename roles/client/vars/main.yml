@@ -13,5 +13,9 @@ mergeBAM: 18
 unmappedReads: 3
 upload: 10
 
+# The values for the download/upload rates thresholds in kB/s
+upload_rate_alert: 100
+download_rate_alert: 1000
+
 # Latest accession used in AWS
 accession: 21
