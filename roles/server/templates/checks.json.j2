@@ -53,7 +53,7 @@
       "handlers": ["default"],
       "command": "/etc/sensu/plugins/check-fs-writable.rb -d /mnt/seqware-oozie ",
       "interval": 60,
-      "subscribers": [ "multi-node-master" ]
+      "subscribers": [ "multi-node-master", "master" ]
     },
     "check-disk-space": {
       "handlers": ["default"],
