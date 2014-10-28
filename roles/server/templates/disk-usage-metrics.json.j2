@@ -2,7 +2,7 @@
   "checks": {
     "disk-usage-metrics": {
       "type": "metric",
-      "command": "disk-usage-metrics.rb --scheme :::client.name:::",
+      "command": "disk-usage-metrics.rb --scheme :::name:::",
       "interval": 60,
       "subscribers": ["common"],
       "handlers": ["relay"]

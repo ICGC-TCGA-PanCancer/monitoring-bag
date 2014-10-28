@@ -12,7 +12,7 @@ download_rate_alert={{ download_rate_alert }}
 
 for workflow in `sudo -u seqware -i /home/seqware/bin/seqware workflow report --accession $accession | grep -A 4 -B 1 running| grep 'Workflow Run Engine ID'| awk -F"|" '{print $2}'`;\
 do \
-	for step in `oozie job -info $workflow -oozie http://localhost:11000/oozie | grep RUNNING| grep 0000| awk -F"@" '{print $2}'| awk '{print $3}'`;\
+	for step in `oozie job -info $workflow -oozie http://localhost:11000/oozie | grep RUNNING| grep 0000| awk -F"@" '{print $2}'| awk '{print $3}'|tail -1`;\
 	do \
 		startlong=`sudo -u seqware -i /usr/bin/qstat -f | grep $step| awk '{print $6, $7}'`;\
 		startshort=`date -d "$startlong" +"%s"`;\
