@@ -11,7 +11,7 @@ if [ -z $jobid ]
 		echo "There are no jobs running, please investigate why!"
 		exit 2
 	else
-		days=`echo $jobid | grep "Run Time"| awk -F":" '{print $2}'| awk '{print $1}'`
+		days=`echo $jobid | grep "Run Time"| awk -F"|" '{print $2}'| awk '{print $1}'`
 		days_clean=`echo "${days: -1}"`
 
 		if [ $days_clean == "d" ]
