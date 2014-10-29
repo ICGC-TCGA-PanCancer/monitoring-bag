@@ -9,7 +9,7 @@ jobid=`sudo -u seqware -i /home/seqware/bin/seqware workflow report --accession 
 if [ -z $jobid ]
 	then 
 		echo "There are no jobs running, please investigate why!"
-		exit 2
+		exit 1
 	else
 		days=`echo $jobid | grep "Run Time"| awk -F"|" '{print $2}'| awk '{print $1}'`
 		days_clean=`echo "${days: -1}"`
