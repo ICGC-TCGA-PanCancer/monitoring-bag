@@ -24,17 +24,17 @@ NOTE: Make sure that ports are open between your instances. The Sensu server acc
 
 Stage 4
 
-If you are using the Deployer to deploy single-node Seqware nodes in AWS, add their IP addresses in the inventory file in the [single-node] Ansible group. This will make sure that some of the checks (e.g. glusterfs related checks) will not be deployed on these nodes.
+If you are using the Deployer to deploy single-node Seqware nodes in AWS, add their IP addresses in the inventory file in the [master] Ansible group. This will make sure that some of the checks (e.g. glusterfs related checks) will not be deployed on these nodes.
 
 Stage 5
 
 Run this playbook via:
 
-    ansible-playbook -i inventory site.yml --limit single-node
+    ansible-playbook -i inventory site.yml --limit master
 
 or without key checking
 
-    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory site.yml --limit single-node
+    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory site.yml --limit master
 
 Stage 6
 
