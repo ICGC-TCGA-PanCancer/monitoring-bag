@@ -46,7 +46,7 @@ do \
 					if [ $hours -gt $gtdownload ]
         				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours and downloading at a rate of $download_rate kB/s."
 					exit 2
-					elif [ $download_rate -lt $download_rate_alert ]
+					elif (( $download_rate -lt $download_rate_alert ))
         				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name is downloading at a rate of $download_rate kB/s."
 					exit 2
 					else echo "No problems detected."
@@ -73,7 +73,7 @@ do \
 					if [ $hours -gt $upload ]
         				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name has been running for $hours hours and is uploading at a rate of $upload_rate kB/s."
 					exit 2
-					elif [ $upload_rate -lt $upload_rate_alert ]
+					elif (( $upload_rate -lt $upload_rate_alert ))
         				then echo "The job with Workflow Run Engine ID $workflow step ID $step doing $step_name is uploading at a rate of $upload_rate kB/s."
 					else echo "No problems detected."
 					exit 0
