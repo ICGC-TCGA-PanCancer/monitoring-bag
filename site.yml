@@ -17,6 +17,7 @@
 
 - hosts: master
   sudo: True
+  tasks:
   - name: Disable ephemeral mount at /mnt for amazon AWS
     shell: umount /mnt
     register: umount_output
