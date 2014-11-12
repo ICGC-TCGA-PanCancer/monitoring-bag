@@ -5,6 +5,13 @@ A playbook that sets up sensu client+ server and other tools such as logstash.
 
 This playbook should be used in multiple stages:
 
+## Dependencies
+
+Unfortunately, lvm functionality requires a patch from ansible develop that can be applied on ubuntu as follows. 
+
+        wget https://raw.githubusercontent.com/ansible/ansible-modules-extras/devel/system/lvg.py
+        sudo cp lvg.py /usr/share/ansible/system/lvg
+
 Stage 1
 
 Deploy the Deployer, Reaper, etc using the Bindle 2.0 playbook on a new cloud (AWS) instance.
