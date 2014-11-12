@@ -14,6 +14,9 @@
     lineinfile: dest=/etc/hosts line="{{ hostvars[item].ansible_ssh_host }} {{item}}" state=present
     when: hostvars[item].ansible_default_ipv4.address is defined
     with_items: groups['sensu-server']
+
+- hosts: master
+  sudo: True
   - name: Disable ephemeral mount at /mnt for amazon AWS
     shell: umount /mnt
     register: umount_output
