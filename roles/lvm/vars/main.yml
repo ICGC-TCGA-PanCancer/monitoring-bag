@@ -1,0 +1,4 @@
+---
+lvm_device_whitelist: '/dev/xvdb,/dev/xvdc'
+brick_file_system: 'xfs'
+vendor_data: '/mnt/seqware-oozie'

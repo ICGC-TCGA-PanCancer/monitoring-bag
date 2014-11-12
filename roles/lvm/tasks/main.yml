@@ -1,0 +1,23 @@
+---
+# file: roles/storage/lvm/tasks/install.yml
+# These tasks are run on all nodes
+
+- name: Ensure required packages are installed
+  apt: pkg={{ item }} state=latest cache_valid_time=86400 update_cache=yes
+  with_items:
+   - lvm2
+   - parted
+   - xfsprogs
+
+- name: Storage | Create a volume group white listed devices
+  lvg: vg=volume_group pvs={{ lvm_device_whitelist }} state=present vg_options=
+
+- name: Storage | Create logical volume
+  lvol: vg=volume_group lv=logical_volume state=present  size=100%FREE
+  
+- name: Storage | Create file system
+  filesystem: dev=/dev/volume_group/logical_volume  fstype={{ brick_file_system }}
+  
+- name: Storage | Mount lvm volume
+  mount: name={{ vendor_data }} src=/dev/volume_group/logical_volume fstype={{ brick_file_system }} opts=rw,noauto state=mounted
+
