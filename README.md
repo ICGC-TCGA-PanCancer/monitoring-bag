@@ -17,7 +17,8 @@ Run the script in ssl (bash ssl/script.sh) to generate a unique set of SSL certi
 Stage 3
 
 Deploy the Sensu playbook to install Sensu server on the Deployer.
-ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory site.yml --limit sensu-server
+
+        ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory site.yml --limit sensu-server
 
 NOTE: Make sure that ports are open between your instances. The Sensu server accepts Rabbitmq SSL connections on port 5671, Sensu API listens on port 4567, and Uchiwa Dashboard uses port 3000. Clients and the server will need  to connect to Rabbitmq on port 5671. Uchiwa needs access to Sensu API (4567). You need access to Uchiwa (port 3000).
 
@@ -46,18 +47,18 @@ If you want to see the status of all checks and Sensu clients in a single Dashbo
 
 Then, ssh into the Sensu Central and add a new section in "/etc/sensu/uchiwa.json" like below and restart the uchiwa service:
 
- "sensu": [
-        {
-            "name": "Sensu AWS Ireland",
-            "host": "1.2.3.4",
-            "ssl": false,
-            "port": 4567,
-            "user": "admin",
-            "pass": "seqware",
-            "path": "",
-            "timeout": 5000
-        }
-    ],
+     "sensu": [
+            {
+                "name": "Sensu AWS Ireland",
+                "host": "1.2.3.4",
+                "ssl": false,
+                "port": 4567,
+                "user": "admin",
+                "pass": "seqware",
+                "path": "",
+                "timeout": 5000
+            }
+        ],
  
 
 
