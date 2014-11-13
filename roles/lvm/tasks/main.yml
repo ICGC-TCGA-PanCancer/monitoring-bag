@@ -1,5 +1,5 @@
 ---
-# file: roles/storage/lvm/tasks/install.yml
+# file:  roles/lvm/tasks/main.yml
 # These tasks are run on all nodes
 
 - name: Ensure required packages are installed
