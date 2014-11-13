@@ -71,7 +71,7 @@ Then, ssh into the Sensu Central and add a new section in "/etc/sensu/uchiwa.jso
  
 ### Stage 8
 
-If you wish to use lvm functionality, you will need to whitelist certain devices. These can be overridden by passing in ansible variables in JSON or YAML format. An example follows that uses both ephemeral disks for a m1.xlarge instance with four ephemeral disks.
+If you wish to use lvm functionality, you will need to whitelist certain devices. These can be overridden by passing in ansible variables in JSON or YAML format. An example follows that uses four ephemeral disks for a m1.xlarge instance with four ephemeral disks in total.
 
         {
         "lvm_device_whitelist" : "/dev/xvdc,/dev/xvdd,/dev/xvde,/dev/xvdf",
