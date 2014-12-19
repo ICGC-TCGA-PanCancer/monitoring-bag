@@ -142,6 +142,7 @@
      - check-gluster.sh
      - check-qstat.sh
      - check-seqware-failed.sh
+     - check-sanger.sh
   notify: restart sensu-client
 
 - name: Activate client services
