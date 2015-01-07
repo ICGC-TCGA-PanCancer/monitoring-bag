@@ -1,14 +1,18 @@
 #!/bin/bash
-#set -x
+set -x
 out=`oozie jobs -oozie http://localhost:11000/oozie | grep RUNNING | wc -l`
 if [[ $out -eq 1 ]]; then
 status=`sudo -u seqware -i qstat -f| grep -A1 main.q@master| tail -n 1|awk '{print $5}'`
 step_name=`sudo -u seqware -i qstat -f| grep -A1 main.q@master| tail -n 1|awk '{print $3}'`
+status_qw=`sudo -u seqware -i qstat -f | grep  -A2 "PENDING JOBS"| tail -n 1|awk '{print $5}'`
 
 if [ -z $status ]
         then
-                echo "There are no SGE jobs/steps running, but Oozie reports a running workflow!"
+		if [ $status_qw = "qw" ]
+			then 
+                	echo "There are no SGE jobs queued, but none are running"
                 exit 1
+		fi
 
 elif [ $status != "r" ]
         then
@@ -19,4 +23,3 @@ else
                 exit 0
 fi
 fi
-
