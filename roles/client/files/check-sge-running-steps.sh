@@ -10,7 +10,7 @@ if [ -z $status ]
                 echo "There are no SGE jobs/steps running, but Oozie reports a running workflow!"
                 exit 1
 
-elif [ $status -ne "r" ]
+elif [ $status != "r" ]
         then
                 echo "The most recent SGE job is $step_name. but is queued instead of running."
 		exit 1
