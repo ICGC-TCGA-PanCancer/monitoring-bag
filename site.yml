@@ -57,7 +57,7 @@
   sudo: True
   roles: 
     - { role: base }
-    - { role: client, subscriptions: "\"common\",\"master\"" }
+    - { role: client, subscriptions: "\"common\",\"sanger\"" }
 
 - hosts: master
   sudo: True
