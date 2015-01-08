@@ -91,6 +91,12 @@
       "interval": 60,
       "subscribers": [ "multi-node-master" ]
     },
+    "check-sanger": {
+      "handlers": ["default"],
+      "command": "/etc/sensu/plugins/check-sanger.sh",
+      "interval": 60,
+      "subscribers": [ "sanger" ]
+    },
     "check-qstat": {
       "handlers": ["default"],
       "command": "/etc/sensu/plugins/check-qstat.sh",
