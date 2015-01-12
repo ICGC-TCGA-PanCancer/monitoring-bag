@@ -18,4 +18,5 @@ upload_rate_alert: 100
 download_rate_alert: 1000
 
 # Latest accession used in AWS
-accession: 21
+#accession: 21
+workflow_version: SangerPancancerCgpCnIndelSnvStr_1.0.2
