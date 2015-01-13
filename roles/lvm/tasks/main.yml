@@ -22,4 +22,4 @@
   mount: name={{ vendor_data }} src=/dev/volume_group/logical_volume fstype={{ brick_file_system }} opts=rw,noauto state=mounted
 
 - name: Storage | Ownership 
-  file: path={{ vendor_data }} owner=seqware group=seqware
+  file: path={{ vendor_data }} owner=seqware group=seqware mode=0777
