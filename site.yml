@@ -65,4 +65,4 @@
   # this seems like the wrong place for this, but not sure what the best place for it is if we cannot redistribute 
   # with the AMI
   - name: Copy over pem key for BWA
-    copy: src=/home/ubuntu/.ssh/gnostest.pem dest=/mnt/home/seqware owner=seqware
+    copy: src=/home/ubuntu/.ssh/gnostest.pem dest=/mnt/home/seqware owner=seqware mode=0600
