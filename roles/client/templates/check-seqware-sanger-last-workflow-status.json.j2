@@ -1,0 +1,27 @@
+#!/bin/bash
+#set -x
+workflow_version={{ workflow_version }}
+
+accession=`sudo -u seqware -i /home/seqware/bin/seqware workflow list | grep -B5 "Workflow_Bundle_$workflow_version"| grep "SeqWare Accession" | awk -F"|" '{print $2}'|tail -1`
+
+last_record_status=`sudo -u seqware -i /home/seqware/bin/seqware workflow report --accession $accession | grep -A3 "RECORD 0" | grep "Workflow Run Status"| awk -F"|" '{print $2}'`
+	
+case $last_record_status in
+			*running*)
+		echo "The status of the last job is $last_record_status"
+		exit 0
+		;;
+			*failed*)
+		echo "The status of the last job is $last_record_status and it needs your attention"
+		exit 2
+		;;
+			*completed*)
+		echo "The status of the last job is $last_record_status, and a new sample should be scheduled soon."
+		exit 1
+		;;
+			*)
+		echo "The status of the last job is $last_record_status."
+		exit 3
+		;;
+esac
+

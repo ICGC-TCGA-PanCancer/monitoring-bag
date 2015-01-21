@@ -6,7 +6,7 @@ upload_rate_alert={{ upload_rate_alert }}
 download_rate_alert={{ download_rate_alert }}
 workflow_version={{ workflow_version }}
 
-accession=`sudo -u seqware -i /home/seqware/bin/seqware workflow list | grep -B5 "Workflow_Bundle_$workflow_version"| grep "SeqWare Accession" | awk -F"|" '{print $2}'`
+accession=`sudo -u seqware -i /home/seqware/bin/seqware workflow list | grep -B5 "Workflow_Bundle_$workflow_version"| grep "SeqWare Accession" | awk -F"|" '{print $2}'|tail -1`
 
 for workflow in `sudo -u seqware -i /home/seqware/bin/seqware workflow report --accession $accession | grep -A 4 -B 1 running| grep 'Workflow Run Engine ID'| awk -F"|" '{print $2}'`;\
 do \
@@ -59,4 +59,3 @@ do \
 	   fi
 	done
 done
-
