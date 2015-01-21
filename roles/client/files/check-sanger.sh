@@ -1,4 +1,5 @@
 #!/bin/bash
+# This check looks for a oozie job in “running” status
 
 out=`oozie jobs -oozie http://localhost:11000/oozie | grep RUNNING | wc -l`
 
