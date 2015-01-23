@@ -15,6 +15,10 @@ case $last_record_status in
 		echo "The status of the last job is $last_record_status and it needs your attention"
 		exit 2
 		;;
+			*submitted*)
+		echo "The status of the last job is $last_record_status."
+		exit 1
+		;;
 			*completed*)
 		echo "The status of the last job is $last_record_status, and a new sample should be scheduled soon."
 		exit 1
