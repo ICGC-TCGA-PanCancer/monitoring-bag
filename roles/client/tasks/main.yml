@@ -161,3 +161,9 @@
 
 - name: Set up the oozie env variable
   copy: src=oozie.sh dest=/etc/profile.d/ mode=0755
+
+- name: Copy over the script that restart oozie in case is out-of-sync with SGE
+  copy: src=test_oozie_sge.pl  dest=/mnt/home/seqware mode=0755
+
+- name: Creates a cron job that runs every 30 min and executes the oozie restart script
+  cron: name="restart oozie" minute="*/30" hour="*" user=seqware job="perl /mnt/seqware/test_oozie_sge.pl > /dev/null"
