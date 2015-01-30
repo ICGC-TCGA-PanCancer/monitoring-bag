@@ -136,6 +136,10 @@
   template: src=check-seqware-jobs-duration.json.j2 dest=/etc/sensu/plugins/check-seqware-jobs-duration.sh mode=0755
   notify: restart sensu-client
 
+- name: Template over check-seqware-sanger-last-workflow-status.sh
+  template: src=check-seqware-sanger-last-workflow-status.json.j2 dest=/etc/sensu/plugins/check-seqware-sanger-last-workflow-status.sh mode=0755
+  notify: restart sensu-client
+
 - name: Template over check-seqware-sanger-jobs-duration.sh
   template: src=check-seqware-sanger-jobs-duration.json.j2 dest=/etc/sensu/plugins/check-seqware-sanger-jobs-duration.sh mode=0755
   notify: restart sensu-client
