@@ -162,8 +162,15 @@
 - name: Set up the oozie env variable
   copy: src=oozie.sh dest=/etc/profile.d/ mode=0755
 
-- name: Copy over the script that restart oozie in case is out-of-sync with SGE
+- name: Check if Seqware is installed on this machine
+  shell: id seqware
+  register: is_worker
+  ignore_errors: true
+
+- name: Copy over the script that restarts oozie in case is out-of-sync with SGE
   copy: src=test_oozie_sge.pl  dest=/mnt/home/seqware mode=0755
+  when: '"id: seqware: No such user" not in is_worker.stderr'
 
 - name: Creates a cron job that runs every 30 min and executes the oozie restart script
   cron: name="restart oozie" minute="*/30" hour="*" user=seqware job="perl /mnt/seqware/test_oozie_sge.pl > /dev/null"
+  when: '"id: seqware: No such user" not in is_worker.stderr'
