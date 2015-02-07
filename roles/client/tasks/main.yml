@@ -169,8 +169,8 @@
 
 - name: Copy over the script that restarts oozie in case is out-of-sync with SGE
   copy: src=test_oozie_sge.pl  dest=/mnt/home/seqware mode=0755
-  when: '"id: seqware: No such user" not in is_worker.stderr' or '"id: seqware: no such user" not in is_worker.stderr'
+  when: '"id: seqware: No such user" not in is_worker.stderr or "id: seqware: no such user" not in is_worker.stderr'
 
 - name: Creates a cron job that runs every 30 min and executes the oozie restart script
   cron: name="restart oozie" minute="*/30" hour="*" user=seqware job="perl /mnt/home/seqware/test_oozie_sge.pl > /dev/null"
-  when: '"id: seqware: No such user" not in is_worker.stderr' or '"id: seqware: no such user" not in is_worker.stderr'
+  when: '"id: seqware: No such user" not in is_worker.stderr or "id: seqware: no such user" not in is_worker.stderr'
