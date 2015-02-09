@@ -12,7 +12,7 @@ case $last_record_status in
 		exit 0
 		;;
 			*failed*)
-			oozie_running_job=`sudo -u seqware -i /home/seqware/bin/seqware workflow report --accession $accession | grep -A4 "Workflow Run Status            | failed" | tail -n1| awk -F"|" '{print $2}'`
+			oozie_running_job=`sudo -u seqware -i /home/seqware/bin/seqware workflow report --accession $accession | grep -A4 "Workflow Run Status            | failed" | head -n 5 |tail -n 1| awk -F"|" '{print $2}'`
                         sge_failed_step=`sudo -u seqware -i oozie job -info $oozie_running_job | grep ERROR | awk -F"@" '{print $2}'| awk '{print $1}'`
 		echo "The status of the last job is $last_record_status and the failed step is $sge_failed_step"
 		exit 2
