@@ -2,7 +2,7 @@
 #set -x
 workflow_version={{ workflow_version }}
 
-accession=`sudo -u seqware -i /home/seqware/bin/seqware workflow list | grep -B5 "Workflow_Bundle_$workflow_version"| grep "SeqWare Accession" | awk -F"|" '{print $2}'|tail -1`
+accession=`sudo -u seqware -i /home/seqware/bin/seqware workflow list | grep -B5 "Workflow_Bundle_$workflow_version"| grep "SeqWare Accession" | awk -F"|" '{print $2}'| sort -n |tail -1`
 
 last_record_status=`sudo -u seqware -i /home/seqware/bin/seqware workflow report --accession $accession | grep -A3 "RECORD 0" | grep "Workflow Run Status"| awk -F"|" '{print $2}'`
 	
