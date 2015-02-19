@@ -103,6 +103,12 @@
       "interval": 60,
       "subscribers": [ "multi-node-master", "master" ]
     },
+    "check-hdfs": {
+      "handlers": ["default"],
+      "command": "/etc/sensu/plugins/check-hdfs.sh",
+      "interval": 60,
+      "subscribers": [ "multi-node-master", "sanger" ]
+    },
     "check-seqware-failed": {
       "handlers": ["default"],
       "command": "/etc/sensu/plugins/check-seqware-failed.sh",

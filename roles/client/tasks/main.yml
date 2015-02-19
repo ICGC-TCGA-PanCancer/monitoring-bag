@@ -152,6 +152,7 @@
      - check-seqware-failed.sh
      - check-sanger.sh
      - check-sge-running-steps.sh
+     - check-hdfs.sh
   notify: restart sensu-client
 
 - name: Activate client services
