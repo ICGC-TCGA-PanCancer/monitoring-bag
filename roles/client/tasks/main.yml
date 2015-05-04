@@ -29,6 +29,11 @@
   apt: name=ruby state=latest
   when: ansible_distribution_release == "trusty"
 
+- name: Remove default Gem source HTTP
+  command: gem sources -r http://rubygems.org/
+
+- name: Add new Gem source HTTPS
+  command: gem sources -a https://rubygems.org/
 
 - name: Install sensu-plugin gem
   gem: name=sensu-plugin state=latest
