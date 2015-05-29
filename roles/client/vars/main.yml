@@ -1,21 +1,34 @@
 ---
 subscriptions: "compute"
-# The folowing values are good for AWS, please change them for other environments
+# The folowing values are good for DKFZ, please change them for other environments
+ASCAT_allele_count: 3
+bbAllele_control: 3
+ASCAT_ascat: 1
+bbAllele_tumour: 3
+binCounts_control: 1
+binCounts_tumour: 1
+BRASS_input: 4
+CaVEMan_estep: 38
+CaVEMan_flag: 6
+CaVEMan_mstep: 8
+cgpPindel_input: 8
+cgpPindel_pin2vcf: 2
+cgpPindel_pindel: 1
+GNOSDownload: 3
+vcfUpload: 1
 
 # total_max_workflow_duration is the total duration allowed for a workflow, in DAYS
 total_max_workflow_duration: 8
 
 # The values for individual steps in a workflow are specified in HOURS
-bam_stats: 5
-bwa_mem: 25
-gtdownload: 3
-mergeBAM: 18
-unmappedReads: 3
-upload: 10
+gtdownload: 4
+upload: 3
+
 
 # The values for the download/upload rates thresholds in kB/s
 upload_rate_alert: 100
 download_rate_alert: 1000
 
 # Latest accession used in AWS
-accession: 21
+#accession: 21
+workflow_version: SangerPancancerCgpCnIndelSnvStr

@@ -29,6 +29,11 @@
   apt: name=ruby state=latest
   when: ansible_distribution_release == "trusty"
 
+- name: Remove default Gem source HTTP
+  command: gem sources -r http://rubygems.org/
+
+- name: Add new Gem source HTTPS
+  command: gem sources -a https://rubygems.org/
 
 - name: Install sensu-plugin gem
   gem: name=sensu-plugin state=latest
@@ -136,6 +141,14 @@
   template: src=check-seqware-jobs-duration.json.j2 dest=/etc/sensu/plugins/check-seqware-jobs-duration.sh mode=0755
   notify: restart sensu-client
 
+- name: Template over check-seqware-sanger-last-workflow-status.sh
+  template: src=check-seqware-sanger-last-workflow-status.json.j2 dest=/etc/sensu/plugins/check-seqware-sanger-last-workflow-status.sh mode=0755
+  notify: restart sensu-client
+
+- name: Template over check-seqware-sanger-jobs-duration.sh
+  template: src=check-seqware-sanger-jobs-duration.json.j2 dest=/etc/sensu/plugins/check-seqware-sanger-jobs-duration.sh mode=0755
+  notify: restart sensu-client
+
 - name: Copy over Gluster peer status check
   copy: src={{ item }} dest=/etc/sensu/plugins/ mode=0755
   with_items:
@@ -143,6 +156,8 @@
      - check-qstat.sh
      - check-seqware-failed.sh
      - check-sanger.sh
+     - check-sge-running-steps.sh
+     - check-hdfs.sh
   notify: restart sensu-client
 
 - name: Activate client services
@@ -152,3 +167,15 @@
 
 - name: Set up the oozie env variable
   copy: src=oozie.sh dest=/etc/profile.d/ mode=0755
+
+- name: Check if Seqware is installed on this machine
+  command: ls /home
+  register: home_output
+
+- name: Copy over the script that restarts oozie in case is out-of-sync with SGE
+  copy: src=test_oozie_sge.pl  dest=/mnt/home/seqware mode=0755
+  when: home_output.stdout.find('seqware') != -1
+
+- name: Creates a cron job that runs every 30 min and executes the oozie restart script
+  cron: name="restart oozie" minute="*/30" hour="*" user=seqware job="perl /mnt/home/seqware/test_oozie_sge.pl > /dev/null"
+  when: home_output.stdout.find('seqware') != -1

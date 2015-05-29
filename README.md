@@ -86,4 +86,4 @@ If you wish to use lvm functionality, you will need to whitelist certain devices
 
 Run this playbook and pass in variables via:
 
-    ansible-playbook -i inventory site.yml --limit master -e @variables.json
+    ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory site.yml --limit master -e @variables.json
