@@ -10,17 +10,17 @@
   # Idempotent way to build a /etc/hosts file with Ansible using your Ansible hosts inventory for a source.
   # Will include all hosts the playbook is run on.
   # Inspired from http://xmeblog.blogspot.com/2013/06/ansible-dynamicaly-update-etchosts.html
-  - name: copy hosts file to tmp
-    sudo: True
-    shell: cp /etc/hosts /tmp/hosts
+#  - name: copy hosts file to tmp
+#    sudo: True
+#    shell: cp /etc/hosts /tmp/hosts
   - name: Build hosts file for all hosts
     sudo: True
-    lineinfile: dest=/tmp/hosts line="{{ lookup('env','PUBLIC_IP_ADDRESS')  }} {{item}}" state=present
-    when: hostvars[item].ansible_default_ipv4.address is defined
+    lineinfile: dest=/etc/hosts line="{{ lookup('env','PUBLIC_IP_ADDRESS')  }} {{item}}" state=present
+    when: hostvars[item].ansible_default_ipv4.address is defined and hostvars[item].ansible_connection != 'local'
     with_items: groups['sensu-server']
-  - name: copy temp hosts to real /etc/hosts
-    sudo: True
-    shell: cp /tmp/hosts /etc/hosts
+#  - name: copy temp hosts to real /etc/hosts
+#    sudo: True
+#    shell: cp /tmp/hosts /etc/hosts
 
 
 - hosts: master
