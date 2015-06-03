@@ -160,6 +160,12 @@
       "command": "/etc/sensu/plugins/check-cmd.rb --command \"sudo -H -u seqware bash -c '/home/seqware/bin/seqware check'\"",
       "interval": 60,
       "subscribers": [ "multi-node-master", "master" ]
+    },
+    "docker-check": {
+      "handlers":["default"],
+      "command":"/etc/sensu/plugins/check-docker-containers.sh",
+      "interval":60,
+      "subscribers":["master","docker","common"]
     }
   }
 }
