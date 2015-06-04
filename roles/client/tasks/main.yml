@@ -182,10 +182,10 @@
   when: home_output.stdout.find('seqware') != -1
 
 - name: Check if docker group exists
-  shell: getent group docker
+  shell: grep docker /etc/group
   register: docker_group_exists
 
 - name: Add sensu user to docker group
-  user: name=sensu groups=dockeir
+  user: name=sensu groups=docker
   when: docker_group_exists.std_out != ""
 
