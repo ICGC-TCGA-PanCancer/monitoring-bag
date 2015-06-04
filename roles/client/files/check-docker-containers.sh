@@ -25,7 +25,8 @@ echo "docker.${HOSTNAME}.running_containers ${running_containers}"
 echo "docker.${HOSTNAME}.total_containers ${total_containers}"
 echo "docker.${HOSTNAME}.total_images ${total_images}"
 
-if [ ${running_containers} -lt 3 ]; then
+# If no containers are running, that should trigger a warning.
+if [ ${running_containers} -lt 1 ]; then
     exit 1;
 fi
 

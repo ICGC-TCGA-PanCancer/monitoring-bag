@@ -180,3 +180,7 @@
 - name: Creates a cron job that runs every 30 min and executes the oozie restart script
   cron: name="restart oozie" minute="*/30" hour="*" user=seqware job="perl /mnt/home/seqware/test_oozie_sge.pl > /dev/null"
   when: home_output.stdout.find('seqware') != -1
+
+- name: Add sensu user to docker group
+  user: name=sensu groups=docker
+

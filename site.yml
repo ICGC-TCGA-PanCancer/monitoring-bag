@@ -1,19 +1,15 @@
 ---
-- hosts: all 
+- hosts: all
   sudo: True
   tasks:
   # ensure a hostname is set for the sensu-server
-  #- name: Set hostname
-  #  hostname: name={{ansible_hostname}}
-  # This allows clients to refer to the sensu-server by name
-  # Idempotent way to build a /etc/hosts file with Ansible using your Ansible hosts inventory for a source.
-  # Will include all hosts the playbook is run on.
-  # Inspired from http://xmeblog.blogspot.com/2013/06/ansible-dynamicaly-update-etchosts.html
+  # $PUBLIC_IP_ADDRESS is defined when the pancancer_launcher container is started
+  - debug: var=group_names
+  - debug: msg={{ lookup('env','SENSU_SERVER_IP_ADDRESS') }}
   - name: Build hosts file for all hosts
     sudo: True
-    lineinfile: dest=/etc/hosts line="{{ lookup('env','PUBLIC_IP_ADDRESS')  }} {{item}}" state=present
-    when: hostvars[item].ansible_default_ipv4.address is defined and hostvars[item].ansible_connection != 'local'
-    with_items: groups['master']
+    lineinfile: dest=/etc/hosts line="{{ lookup('env','SENSU_SERVER_IP_ADDRESS') }} sensu-server" state=present
+    when: "'master' in group_names and \"{{ lookup('env','SENSU_SERVER_IP_ADDRESS') }}\" != \"\""
 
 - hosts: master
   sudo: True
