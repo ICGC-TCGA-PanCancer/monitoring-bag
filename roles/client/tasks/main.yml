@@ -181,11 +181,7 @@
   cron: name="restart oozie" minute="*/30" hour="*" user=seqware job="perl /mnt/home/seqware/test_oozie_sge.pl > /dev/null"
   when: home_output.stdout.find('seqware') != -1
 
-- name: Check if docker group exists
-  shell: grep docker /etc/group
-  register: docker_group_exists
-
 - name: Add sensu user to docker group
   user: name=sensu groups=docker
-  when: docker_group_exists.std_out != ""
+  when: "'master' in group_names"
 
