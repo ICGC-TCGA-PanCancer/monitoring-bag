@@ -1,19 +1,15 @@
 ---
-- hosts: all 
+- hosts: all
   sudo: True
   tasks:
   # ensure a hostname is set for the sensu-server
-  #- name: Set hostname
-  #  hostname: name={{ansible_hostname}}
-
-  # This allows clients to refer to the sensu-server by name
-  # Idempotent way to build a /etc/hosts file with Ansible using your Ansible hosts inventory for a source.
-  # Will include all hosts the playbook is run on.
-  # Inspired from http://xmeblog.blogspot.com/2013/06/ansible-dynamicaly-update-etchosts.html
+  # $PUBLIC_IP_ADDRESS is defined when the pancancer_launcher container is started
+  - debug: var=group_names
+  - debug: msg={{ lookup('env','SENSU_SERVER_IP_ADDRESS') }}
   - name: Build hosts file for all hosts
-    lineinfile: dest=/etc/hosts line="{{ hostvars[item].ansible_ssh_host }} {{item}}" state=present
-    when: hostvars[item].ansible_default_ipv4.address is defined
-    with_items: groups['sensu-server']
+    sudo: True
+    lineinfile: dest=/etc/hosts line="{{ lookup('env','SENSU_SERVER_IP_ADDRESS') }} sensu-server" state=present
+    when: "'master' in group_names and \"{{ lookup('env','SENSU_SERVER_IP_ADDRESS') }}\" != \"\""
 
 - hosts: master
   sudo: True
@@ -23,13 +19,6 @@
     register: umount_output
     ignore_errors: yes
     
-- hosts: master
-  sudo: True
-  vars:
-      vendor_data: /mnt/seqware-oozie
-  roles:
-    - { role: lvm, when: single_node_lvm is defined}
-
 # setup sensu-server
 - hosts: sensu-server 
   sudo: True
@@ -59,10 +48,10 @@
     - { role: base }
     - { role: client, subscriptions: "\"common\",\"sanger\"" }
 
-- hosts: master
-  sudo: True
-  tasks:
+#- hosts: master
+#  sudo: True
+#  tasks:
   # this seems like the wrong place for this, but not sure what the best place for it is if we cannot redistribute 
   # with the AMI
-  - name: Copy over pem key for BWA
-    copy: src=/home/ubuntu/.ssh/gnostest.pem dest=/mnt/home/seqware/ owner=seqware
+#  - name: Copy over pem key for BWA
+#    copy: src=/home/ubuntu/.ssh/gnostest.pem dest=/home/ubuntu/.gnos/

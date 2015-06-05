@@ -158,6 +158,7 @@
      - check-sanger.sh
      - check-sge-running-steps.sh
      - check-hdfs.sh
+     - check-docker-containers.sh
   notify: restart sensu-client
 
 - name: Activate client services
@@ -165,17 +166,22 @@
   with_items:
     - sensu-client 
 
-- name: Set up the oozie env variable
-  copy: src=oozie.sh dest=/etc/profile.d/ mode=0755
+#- name: Set up the oozie env variable
+#  copy: src=oozie.sh dest=/etc/profile.d/ mode=0755
 
 - name: Check if Seqware is installed on this machine
   command: ls /home
   register: home_output
 
-- name: Copy over the script that restarts oozie in case is out-of-sync with SGE
-  copy: src=test_oozie_sge.pl  dest=/mnt/home/seqware mode=0755
-  when: home_output.stdout.find('seqware') != -1
+#- name: Copy over the script that restarts oozie in case is out-of-sync with SGE
+#  copy: src=test_oozie_sge.pl  dest=/mnt/home/seqware mode=0755
+#  when: home_output.stdout.find('seqware') != -1
 
-- name: Creates a cron job that runs every 30 min and executes the oozie restart script
-  cron: name="restart oozie" minute="*/30" hour="*" user=seqware job="perl /mnt/home/seqware/test_oozie_sge.pl > /dev/null"
-  when: home_output.stdout.find('seqware') != -1
+#- name: Creates a cron job that runs every 30 min and executes the oozie restart script
+#  cron: name="restart oozie" minute="*/30" hour="*" user=seqware job="perl /mnt/home/seqware/test_oozie_sge.pl > /dev/null"
+#  when: home_output.stdout.find('seqware') != -1
+
+- name: Add sensu user to docker group
+  user: name=sensu groups=docker
+  when: "'master' in group_names"
+

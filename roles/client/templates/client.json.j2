@@ -1,6 +1,6 @@
 {
   "client": {
-    "name": "{{ inventory_hostname }}",
+    "name": "{{ inventory_hostname }}_{{ ansible_ssh_host }}",
     "address": "{{ ansible_ssh_host }}",
     "subscriptions": [ {{ subscriptions }} ],
     "environment" : {
