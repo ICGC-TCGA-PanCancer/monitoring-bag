@@ -1,6 +1,6 @@
 {
   "redis": {
-    "host": "{{ redis_host }}",
+    "host": "{% ext_rabbitmq %}redis{% else %}localhost{% endif %}",
     "port": 6379
   }
 }
