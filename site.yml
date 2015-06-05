@@ -22,8 +22,10 @@
 # setup sensu-server
 - hosts: sensu-server 
   sudo: True
+  vars: 
+    ext_rabbitmq: false
   roles: 
-    - { role: server-dependencies }
+    - { role: server-dependencies, when: not ext_rabbitmq }
     - { role: base }
     - { role: server }
     - { role: sensu-cli }
