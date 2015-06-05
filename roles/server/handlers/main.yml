@@ -3,6 +3,7 @@
 
 - name: restart redis
   service: name=redis-server state=restarted 
+  when: not ext_rabbitmq
   
 # need to sleep two seconds because sensu-server cannot stop + start with no wait
 - name: restart sensu server services
@@ -10,3 +11,4 @@
   with_items:
       - sensu-server
       - sensu-api
+  when: not ext_rabbitmq
