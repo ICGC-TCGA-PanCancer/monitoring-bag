@@ -36,14 +36,14 @@
   template: src=iostat-extended-metrics.json.j2 dest=/etc/sensu/conf.d/iostat-extended-metrics.json
   notify: restart sensu server services
 
-- name: Ensure state of server services
+- name: Enable redis service 
   sudo: True
   service: name={{ item }} enabled=yes
   with_items:
     - redis-server
   when: not ext_rabbitmq
 
-- name: Ensure state of server services
+- name: Enable sensu services 
   sudo: True
   service: name={{ item }} enabled=yes
   with_items:
@@ -52,13 +52,12 @@
 
 - name: Ensure state of server services
   sudo: True
-  service: name={{ item }} enabled=yes
+  service: name={{ item }} state=started
   with_items:
     - redis-server
     - sensu-server
     - sensu-api
-  when: ext_rabbitmq
-
+  when: not ext_rabbitmq
 
 - name: Create the directory structure needed by the Graphite relay
   file: path=/etc/sensu/extensions/{{item}} owner=root group=root mode=0755 state=directory
