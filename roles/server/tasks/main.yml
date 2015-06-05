@@ -41,6 +41,12 @@
   service: name={{ item }} state=started enabled=yes
   with_items:
     - redis-server
+  when: not ext_rabbitmq
+
+- name: Ensure state of server services
+  sudo: True
+  service: name={{ item }} state=started enabled=yes
+  with_items:
     - sensu-server
     - sensu-api
 

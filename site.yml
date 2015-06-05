@@ -27,7 +27,8 @@
   roles: 
     - { role: server-dependencies, when: not ext_rabbitmq }
     - { role: base }
-    - { role: server }
+    - { role: server, redis_server: localhost , when: not ext_rabbitmq   }
+    - { role: server, redis_server: redis , when: ext_rabbitmq   }
     - { role: sensu-cli }
     - { role: uchiwa }
     - { role: client, subscriptions: "\"common\"" }
