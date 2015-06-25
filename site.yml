@@ -9,7 +9,7 @@
   - name: Build hosts file for all hosts
     sudo: True
     lineinfile: dest=/etc/hosts line="{{ lookup('env','SENSU_SERVER_IP_ADDRESS') }} sensu-server" state=present
-    when: "'master' in group_names and \"{{ lookup('env','SENSU_SERVER_IP_ADDRESS') }}\" != \"\""
+    when: "\"{{ lookup('env','SENSU_SERVER_IP_ADDRESS') }}\" != \"\""
 
 - hosts: master
   sudo: True
