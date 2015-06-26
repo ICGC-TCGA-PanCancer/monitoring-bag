@@ -8,8 +8,7 @@
   - debug: msg={{ SENSU_SERVER_IP_ADDRESS | default("localhost") }}
   - name: Build hosts file for all hosts
     sudo: True
-    lineinfile: dest=/etc/hosts line="{{ SENSU_SERVER_IP_ADDRESS }} sensu-server" state=present
-    when: "{{ SENSU_SERVER_IP_ADDRESS | default(\"localhost\") }}"
+    lineinfile: dest=/etc/hosts line="{{ SENSU_SERVER_IP_ADDRESS | default('localhost') }} sensu-server" state=present
 
 - hosts: master
   sudo: True
