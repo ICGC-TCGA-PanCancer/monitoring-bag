@@ -5,10 +5,11 @@
   # ensure a hostname is set for the sensu-server
   # $PUBLIC_IP_ADDRESS is defined when the pancancer_launcher container is started
 #  - debug: var=group_names
-  - debug: msg={{ SENSU_SERVER_IP_ADDRESS | default("localhost") }}
+  - debug: msg={{ SENSU_SERVER_IP_ADDRESS | default("not defined") }}
   - name: Build hosts file for all hosts
     sudo: True
     lineinfile: dest=/etc/hosts line='{{ SENSU_SERVER_IP_ADDRESS | default("localhost") }} sensu-server' state=present
+    when: SENSU_SERVER_IP_ADDRESS is defined
 
 - hosts: master
   sudo: True
