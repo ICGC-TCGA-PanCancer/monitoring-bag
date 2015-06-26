@@ -9,7 +9,7 @@
   - name: Build hosts file for all hosts
     sudo: True
     lineinfile: dest=/etc/hosts line="{{ SENSU_SERVER_IP_ADDRESS }} sensu-server" state=present
-    when: "SENSU_SERVER_IP_ADDRESS is defined and \"{{ SENSU_SERVER_IP_ADDRESS }}\" != \"\""
+    when: "{{ SENSU_SERVER_IP_ADDRESS | default(\"localhost\") }}"
 
 - hosts: master
   sudo: True
