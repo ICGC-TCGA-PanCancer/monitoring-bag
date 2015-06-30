@@ -4,12 +4,13 @@
   tasks:
   # ensure a hostname is set for the sensu-server
   # $PUBLIC_IP_ADDRESS is defined when the pancancer_launcher container is started
-  - debug: var=group_names
-  - debug: msg={{ lookup('env','SENSU_SERVER_IP_ADDRESS') }}
+#  - debug: var=group_names
+  - name: Sensu server IP address is
+    debug: var={{ SENSU_SERVER_IP_ADDRESS | default("not defined") }}
   - name: Build hosts file for all hosts
     sudo: True
-    lineinfile: dest=/etc/hosts line="{{ lookup('env','SENSU_SERVER_IP_ADDRESS') }} sensu-server" state=present
-    when: "'master' in group_names and \"{{ lookup('env','SENSU_SERVER_IP_ADDRESS') }}\" != \"\""
+    lineinfile: dest=/etc/hosts line='{{ SENSU_SERVER_IP_ADDRESS | default("localhost") }} sensu-server' state=present
+    when: SENSU_SERVER_IP_ADDRESS is defined
 
 - hosts: master
   sudo: True
@@ -18,11 +19,11 @@
     shell: umount /mnt
     register: umount_output
     ignore_errors: yes
-    
+
 # setup sensu-server
-- hosts: sensu-server 
+- hosts: sensu-server
   sudo: True
-  roles: 
+  roles:
     - { role: server-dependencies }
     - { role: base }
     - { role: server }
@@ -30,28 +31,28 @@
     - { role: uchiwa }
     - { role: client, subscriptions: "\"common\"" }
 
-- hosts: worker 
+- hosts: worker
   sudo: True
-  roles: 
+  roles:
     - { role: base }
     - { role: client, subscriptions: "\"common\",\"compute\"" }
 
-- hosts: multi-node-master 
+- hosts: multi-node-master
   sudo: True
-  roles: 
+  roles:
     - { role: base }
     - { role: client, subscriptions: "\"common\",\"multi-node-master\"" }
 
-- hosts: master 
+- hosts: master
   sudo: True
-  roles: 
+  roles:
     - { role: base }
     - { role: client, subscriptions: "\"common\",\"sanger\"" }
 
 #- hosts: master
 #  sudo: True
 #  tasks:
-  # this seems like the wrong place for this, but not sure what the best place for it is if we cannot redistribute 
+  # this seems like the wrong place for this, but not sure what the best place for it is if we cannot redistribute
   # with the AMI
 #  - name: Copy over pem key for BWA
 #    copy: src=/home/ubuntu/.ssh/gnostest.pem dest=/home/ubuntu/.gnos/
