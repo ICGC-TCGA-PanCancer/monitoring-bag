@@ -166,7 +166,7 @@
      - check-docker-containers.sh
      - check-arch3-worker.sh
   #These two checks should only go on worker nodes.
-  when: 'sensu-server' not in group_names
+  when: "'sensu-server' not in group_names"
   notify: restart sensu-client
 
 - name: Activate client services
