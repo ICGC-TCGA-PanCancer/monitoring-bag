@@ -39,95 +39,95 @@
   gem: name=sensu-plugin state=latest
   when: ansible_distribution_release == "precise"
 
-- name: Install check-procs plugin 
-  get_url: 
-    dest=/etc/sensu/plugins/check-procs.rb 
+- name: Install check-procs plugin
+  get_url:
+    dest=/etc/sensu/plugins/check-procs.rb
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/processes/check-procs.rb
     mode=755
   notify: restart sensu-client
 
 - name: Install load metrics
-  get_url: 
-    dest=/etc/sensu/plugins/load-metrics.rb 
+  get_url:
+    dest=/etc/sensu/plugins/load-metrics.rb
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/system/load-metrics.rb
     mode=755
   notify: restart sensu-client
 
 - name: Install memory metrics
-  get_url: 
-    dest=/etc/sensu/plugins/memory-metrics.rb 
+  get_url:
+    dest=/etc/sensu/plugins/memory-metrics.rb
     url=https://raw.githubusercontent.com/sensu/sensu-community-plugins/master/plugins/system/memory-metrics.rb
     mode=755
   notify: restart sensu-client
 
 - name: Install interface metrics
-  get_url: 
-    dest=/etc/sensu/plugins/interface-metrics.rb 
+  get_url:
+    dest=/etc/sensu/plugins/interface-metrics.rb
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/system/interface-metrics.rb
     mode=755
   notify: restart sensu-client
 
 - name: Install disk metrics
-  get_url: 
-    dest=/etc/sensu/plugins/disk-usage-metrics.rb 
+  get_url:
+    dest=/etc/sensu/plugins/disk-usage-metrics.rb
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/system/disk-usage-metrics.rb
     mode=755
   notify: restart sensu-client
 
 - name: Install iostat metrics
-  get_url: 
+  get_url:
     dest=/etc/sensu/plugins/iostat-extended-metrics.rb
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/system/iostat-extended-metrics.rb
     mode=755
   notify: restart sensu-client
 
-- name: Install check-ntp plugin 
-  get_url: 
-    dest=/etc/sensu/plugins/check-ntp.rb 
+- name: Install check-ntp plugin
+  get_url:
+    dest=/etc/sensu/plugins/check-ntp.rb
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/system/check-ntp.rb
     mode=755
   notify: restart sensu-client
 
-  
-- name: Install check-cmd plugin 
-  get_url: 
-    dest=/etc/sensu/plugins/check-cmd.rb 
+
+- name: Install check-cmd plugin
+  get_url:
+    dest=/etc/sensu/plugins/check-cmd.rb
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/processes/check-cmd.rb
     mode=755
   notify: restart sensu-client
-  
-- name: Install check-cpu plugin 
-  get_url: 
-    dest=/etc/sensu/plugins/check-cpu.rb 
+
+- name: Install check-cpu plugin
+  get_url:
+    dest=/etc/sensu/plugins/check-cpu.rb
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/system/check-cpu.rb
     mode=755
   notify: restart sensu-client
 
-- name: Install check-fs-writable plugin 
-  get_url: 
-    dest=/etc/sensu/plugins/check-fs-writable.rb 
+- name: Install check-fs-writable plugin
+  get_url:
+    dest=/etc/sensu/plugins/check-fs-writable.rb
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/system/check-fs-writable.rb
     mode=755
   notify: restart sensu-client
 
-- name: Install check-mem plugin 
-  get_url: 
-    dest=/etc/sensu/plugins/check-mem.sh 
+- name: Install check-mem plugin
+  get_url:
+    dest=/etc/sensu/plugins/check-mem.sh
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/system/check-mem.sh
     mode=755
   notify: restart sensu-client
 
 
-- name: Install check-disk-capacity plugin 
-  get_url: 
+- name: Install check-disk-capacity plugin
+  get_url:
     dest=/etc/sensu/plugins/disk-capacity-metrics.rb
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/system/disk-capacity-metrics.rb
     mode=755
   notify: restart sensu-client
 
 
-- name: Install check-disk plugin 
-  get_url: 
+- name: Install check-disk plugin
+  get_url:
     dest=/etc/sensu/plugins/check-disk.rb
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/system/check-disk.rb
     mode=755
@@ -149,7 +149,7 @@
   template: src=check-seqware-sanger-jobs-duration.json.j2 dest=/etc/sensu/plugins/check-seqware-sanger-jobs-duration.sh mode=0755
   notify: restart sensu-client
 
-- name: Copy over Gluster peer status check
+- name: Copy over status checks
   copy: src={{ item }} dest=/etc/sensu/plugins/ mode=0755
   with_items:
      - check-gluster.sh
@@ -158,13 +158,21 @@
      - check-sanger.sh
      - check-sge-running-steps.sh
      - check-hdfs.sh
+  notify: restart sensu-client
+
+- name: Copy over checks for Worker node
+  copy: src={{ item }} dest=/etc/sensu/plugins/ mode=0755
+  with_items:
      - check-docker-containers.sh
+     - check-arch3-worker.sh
+  #These two checks should only go on worker nodes.
+  when: 'sensu-server' not in group_names
   notify: restart sensu-client
 
 - name: Activate client services
   service: name={{ item }} state=started enabled=yes
   with_items:
-    - sensu-client 
+    - sensu-client
 
 #- name: Set up the oozie env variable
 #  copy: src=oozie.sh dest=/etc/profile.d/ mode=0755
@@ -184,4 +192,3 @@
 - name: Add sensu user to docker group
   user: name=sensu groups=docker
   when: "'master' in group_names"
-
