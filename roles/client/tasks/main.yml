@@ -46,6 +46,16 @@
     mode=755
   notify: restart sensu-client
 
+- name: Install rabbitmq-alive plugin
+  get_url: url=https://raw.githubusercontent.com/sensu/sensu-community-plugins/master/plugins/rabbitmq/rabbitmq-alive.rb dest=/etc/sensu/plugins/rabbitmq-alive.rb mode=755
+  notify: restart sensu-client
+  when: "'arch3-launcher' in {{ subscriptions }}"
+
+- name: Install postgres-alive plugin
+  get_url: url=https://raw.githubusercontent.com/sensu/sensu-community-plugins/master/plugins/postgres/postgres-alive.rb dest=/etc/sensu/plugins/postgres-alive.rb mode=755
+  notify: restart sensu-client
+  when: "'arch3-launcher' in {{ subscriptions }}"
+
 - name: Install load metrics
   get_url:
     dest=/etc/sensu/plugins/load-metrics.rb
@@ -149,24 +159,23 @@
   template: src=check-seqware-sanger-jobs-duration.json.j2 dest=/etc/sensu/plugins/check-seqware-sanger-jobs-duration.sh mode=0755
   notify: restart sensu-client
 
-- name: Copy over status checks
-  copy: src={{ item }} dest=/etc/sensu/plugins/ mode=0755
-  with_items:
-     - check-gluster.sh
-     - check-qstat.sh
-     - check-seqware-failed.sh
-     - check-sanger.sh
-     - check-sge-running-steps.sh
-     - check-hdfs.sh
-  notify: restart sensu-client
+#- name: Copy over status checks
+#  copy: src={{ item }} dest=/etc/sensu/plugins/ mode=0755
+#  with_items:
+#     - check-gluster.sh
+#     - check-qstat.sh
+#     - check-seqware-failed.sh
+#     - check-sanger.sh
+#     - check-sge-running-steps.sh
+#     - check-hdfs.sh
+#  notify: restart sensu-client
 
 - name: Copy over checks for Worker node
   copy: src={{ item }} dest=/etc/sensu/plugins/ mode=0755
   with_items:
      - check-docker-containers.sh
-     - check-arch3-worker.sh
   #These two checks should only go on worker nodes.
-  when: "'sensu-server' not in group_names"
+  when: "'arch3-worker' in {{ subscriptions }}"
   notify: restart sensu-client
 
 - name: Activate client services
