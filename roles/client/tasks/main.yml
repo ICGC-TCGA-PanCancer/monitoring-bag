@@ -36,12 +36,14 @@
   command: gem sources -a https://rubygems.org/
 
 - name: Install sensu-plugin gem
-  gem: name=sensu-plugin state=latest
+  gem: name=sensu-plugin state=latest user_install=no
   when: ansible_distribution_release == "precise"
 
 - name: Install sensu plugins (and some of their dependencies)
-  gem: name={{ item }} state=latest
+  gem: name={{ item }} state=latest include_dependencies=yes user_install=no
   with_items:
+    - rake
+    - bundler
     - pg
     - rest_client
     - sensu-plugins-postgres
