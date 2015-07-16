@@ -48,7 +48,9 @@
     - sensu-plugins-rabbitmq
     - sensu-plugins-disk-checks
     - sensu-plugins-process-checks
+  notify: restart sensu-client
 
+# TODO: Find out if any of the plugins below can now be installed as ruby gems, rather than downloading raw ruby files.
 - name: Install check-procs plugin
   get_url:
     dest=/etc/sensu/plugins/check-procs.rb
