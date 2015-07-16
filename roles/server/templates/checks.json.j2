@@ -74,37 +74,37 @@
     },
     "rabbitmq-alive": {
       "handlers":["default"],
-      "command":"/etc/sensu/plugins/rabbitmq-alive.rb -w localhost -v / -u queue_user -p queue",
+      "command":"check-rabbitmq-alive.rb -w localhost -u queue_user -p queue",
       "interval":60,
       "subscribers":["arch3-launcher"]
     },
     "postgres-alive": {
       "handlers":["default"],
-      "command":"/etc/sensu/plugins/postgres-alive.rb -u queue_user -p queue -h localhost -d queue_status",
+      "command":"check-postgres-alive.rb -u queue_user -p queue -h localhost -d queue_status",
       "interval":60,
       "subscribers":["arch3-launcher"]
     },
     "arch3-worker-running": {
       "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-procs.rb -p java.*info.pancancer.arch3.worker.Worker -C 1 -c 1",
+      "command": "check-process.rb -p java.*info.pancancer.arch3.worker.Worker -C 1 -c 1",
       "interval": 60,
       "subscribers": [ "arch3-worker" ]
     },
     "arch3-coordinator-running": {
       "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-procs.rb -p java.*info.pancancer.arch3.coordinator.Coordinator -W 1 -w 1",
+      "command": "check-process.rb -p java.*info.pancancer.arch3.coordinator.Coordinator -W 1 -w 1",
       "interval": 60,
       "subscribers": [ "arch3-launcher" ]
     },
     "arch3-provisioner-running": {
       "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-procs.rb -p java.*info.pancancer.arch3.containerProvisioner.ContainerProvisionerThreads -W 1 -w 1",
+      "command": "check-process.rb -p java.*info.pancancer.arch3.containerProvisioner.ContainerProvisionerThreads -W 1 -w 1",
       "interval": 60,
       "subscribers": [ "arch3-launcher" ]
     },
     "arch3-slack-reporter-running": {
       "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-procs.rb -p java.*info.pancancer.arch3.coordinator.Coordinator -W 1 -w 1",
+      "command": "check-process.rb -p java.*info.pancancer.arch3.reportbot.SlackReportBot -W 1 -w 1",
       "interval": 60,
       "subscribers": [ "arch3-launcher" ]
     }

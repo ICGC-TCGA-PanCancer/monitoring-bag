@@ -39,22 +39,22 @@
   gem: name=sensu-plugin state=latest
   when: ansible_distribution_release == "precise"
 
+- name: Install sensu plugins (and some of their dependencies)
+  gem: name={{ item }} state=latest
+  with_items:
+    - pg
+    - rest_client
+    - sensu-plugins-postgres
+    - sensu-plugins-rabbitmq
+    - sensu-plugins-disk-checks
+    - sensu-plugins-process-checks
+
 - name: Install check-procs plugin
   get_url:
     dest=/etc/sensu/plugins/check-procs.rb
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/processes/check-procs.rb
     mode=755
   notify: restart sensu-client
-
-- name: Install rabbitmq-alive plugin
-  get_url: url=https://raw.githubusercontent.com/sensu/sensu-community-plugins/master/plugins/rabbitmq/rabbitmq-alive.rb dest=/etc/sensu/plugins/rabbitmq-alive.rb mode=755
-  notify: restart sensu-client
-  when: "'arch3-launcher' in {{ subscriptions }}"
-
-- name: Install postgres-alive plugin
-  get_url: url=https://raw.githubusercontent.com/sensu/sensu-community-plugins/master/plugins/postgres/postgres-alive.rb dest=/etc/sensu/plugins/postgres-alive.rb mode=755
-  notify: restart sensu-client
-  when: "'arch3-launcher' in {{ subscriptions }}"
 
 - name: Install load metrics
   get_url:
