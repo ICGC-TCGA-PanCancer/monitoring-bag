@@ -29,30 +29,10 @@
     - { role: server }
     - { role: sensu-cli }
     - { role: uchiwa }
-    - { role: client, subscriptions: "\"common\"" }
+    - { role: client, subscriptions: "\"common\",\"arch3-launcher\"" }
 
-- hosts: worker
+- hosts: master:worker
   sudo: True
   roles:
     - { role: base }
-    - { role: client, subscriptions: "\"common\",\"compute\"" }
-
-- hosts: multi-node-master
-  sudo: True
-  roles:
-    - { role: base }
-    - { role: client, subscriptions: "\"common\",\"multi-node-master\"" }
-
-- hosts: master
-  sudo: True
-  roles:
-    - { role: base }
-    - { role: client, subscriptions: "\"common\",\"sanger\"" }
-
-#- hosts: master
-#  sudo: True
-#  tasks:
-  # this seems like the wrong place for this, but not sure what the best place for it is if we cannot redistribute
-  # with the AMI
-#  - name: Copy over pem key for BWA
-#    copy: src=/home/ubuntu/.ssh/gnostest.pem dest=/home/ubuntu/.gnos/
+    - { role: client, subscriptions: "\"common\",\"compute\",\"docker\",\"arch3-worker\"" }
