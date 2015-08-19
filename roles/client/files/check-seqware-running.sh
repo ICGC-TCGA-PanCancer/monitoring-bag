@@ -17,7 +17,7 @@ if [ -z "${jobid}" ]
 
                 if [ $days_clean == "d" ]
                         then days=$(echo "$days" | sed 's/d//g')
-                                if [ $days -gt 8 ]
+                                if [ $days -gt 1 ]
                                         then echo "The job has been running for more than $days days."
                                         exit 0
                                 else
