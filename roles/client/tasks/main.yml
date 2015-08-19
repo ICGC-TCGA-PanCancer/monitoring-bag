@@ -4,10 +4,6 @@
   template: src=client.json.j2 dest=/etc/sensu/conf.d/client.json
   notify: restart sensu-client
 
-- name: Install rubygems
-  apt: name=rubygems state=latest
-  when: ansible_distribution_release == "precise"
-
 - name: Install sysstat
   apt: name=sysstat state=latest
 
@@ -25,18 +21,12 @@
     regexp='^5-55/10'
     line='* * * * * root command -v debian-sa1 > /dev/null && debian-sa1 1 1'
 
-- name: Install ruby
-  apt: name=ruby state=latest
-  when: ansible_distribution_release == "trusty"
-
-- name: Install ruby-dev
-  apt: name=ruby-dev state=latest
-
 - name: Install packages needed to build sensu plugins
   apt: name={{ item }} state=present
   with_items:
   - build-essential
   - libpq-dev
+  - rubygems
 
 - name: Remove default Gem source HTTP
   command: gem sources -r http://rubygems.org/
@@ -47,19 +37,6 @@
 - name: Install sensu-plugin gem
   gem: name=sensu-plugin state=latest user_install=no
   when: ansible_distribution_release == "precise"
-
-- name: Install sensu plugins (and some of their dependencies)
-  gem: name={{ item }} state=latest user_install=no
-  with_items:
-    - rake
-    - bundler
-    - pg
-    - rest_client
-    - sensu-plugins-postgres
-    - sensu-plugins-rabbitmq
-    - sensu-plugins-disk-checks
-    - sensu-plugins-process-checks
-  notify: restart sensu-client
 
 # TODO: Find out if any of the plugins below can now be installed as ruby gems, rather than downloading raw ruby files.
 - name: Install check-procs plugin
@@ -156,40 +133,14 @@
     mode=755
   notify: restart sensu-client
 
-- name: Template over check-seqware-running.sh
-  template: src=check-seqware-running.json.j2 dest=/etc/sensu/plugins/check-seqware-running.sh mode=0755
-  notify: restart sensu-client
+- name: Install seqware plugin
+  sudo: True
+  copy: src=../files/check-seqware-running.sh dest=/etc/sensu/plugins/check-seqware-running.sh owner=sensu group=sensu mode=0777
 
-- name: Template over check-seqware-jobs-duration.sh
-  template: src=check-seqware-jobs-duration.json.j2 dest=/etc/sensu/plugins/check-seqware-jobs-duration.sh mode=0755
-  notify: restart sensu-client
+- name: Install ini-file-reporter plugin
+  sudo: True
+  copy: src=../files/report-ini.sh dest=/etc/sensu/plugins/report-ini.sh owner=sensu group=sensu mode=0777
 
-- name: Template over check-seqware-sanger-last-workflow-status.sh
-  template: src=check-seqware-sanger-last-workflow-status.json.j2 dest=/etc/sensu/plugins/check-seqware-sanger-last-workflow-status.sh mode=0755
-  notify: restart sensu-client
-
-- name: Template over check-seqware-sanger-jobs-duration.sh
-  template: src=check-seqware-sanger-jobs-duration.json.j2 dest=/etc/sensu/plugins/check-seqware-sanger-jobs-duration.sh mode=0755
-  notify: restart sensu-client
-
-#- name: Copy over status checks
-#  copy: src={{ item }} dest=/etc/sensu/plugins/ mode=0755
-#  with_items:
-#     - check-gluster.sh
-#     - check-qstat.sh
-#     - check-seqware-failed.sh
-#     - check-sanger.sh
-#     - check-sge-running-steps.sh
-#     - check-hdfs.sh
-#  notify: restart sensu-client
-
-- name: Copy over checks for Worker node
-  copy: src={{ item }} dest=/etc/sensu/plugins/ mode=0755
-  with_items:
-     - check-docker-containers.sh
-  #These two checks should only go on worker nodes.
-  when: "'arch3-worker' in {{ subscriptions }}"
-  notify: restart sensu-client
 
 - name: Activate client services
   service: name={{ item }} state=started enabled=yes
@@ -211,6 +162,3 @@
 #  cron: name="restart oozie" minute="*/30" hour="*" user=seqware job="perl /mnt/home/seqware/test_oozie_sge.pl > /dev/null"
 #  when: home_output.stdout.find('seqware') != -1
 
-- name: Add sensu user to docker group
-  user: name=sensu groups=docker
-  when: "'master' in group_names"
