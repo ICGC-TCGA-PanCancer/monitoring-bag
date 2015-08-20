@@ -19,7 +19,8 @@ Unfortunately, the LVM functionality requires a patch from Ansible develop that 
 ### Stage 1
 
 Checkout the "monitoring-bag" playbook from Github, configure SSL by running the script in the ssl directory
-``` cd ssl && bash script.sh ```
+        cd ssl && bash script.sh
+        
 Togenerate a unique set of SSL certificates for your Sensu install, and add the IP address of the server in the [sensu-server] inventory group.
 
 ### Stage 2
