@@ -4,10 +4,6 @@
   template: src=client.json.j2 dest=/etc/sensu/conf.d/client.json
   notify: restart sensu-client
 
-- name: Install rubygems
-  apt: name=rubygems state=latest
-  when: ansible_distribution_release == "precise"
-
 - name: Install sysstat
   apt: name=sysstat state=latest
 
@@ -25,10 +21,6 @@
     regexp='^5-55/10'
     line='* * * * * root command -v debian-sa1 > /dev/null && debian-sa1 1 1'
 
-- name: Install ruby
-  apt: name=ruby state=latest
-  when: ansible_distribution_release == "trusty"
-
 - name: Install ruby-dev
   apt: name=ruby-dev state=latest
 
@@ -37,6 +29,7 @@
   with_items:
   - build-essential
   - libpq-dev
+  - rubygems
 
 - name: Remove default Gem source HTTP
   command: gem sources -r http://rubygems.org/
@@ -68,6 +61,9 @@
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/processes/check-procs.rb
     mode=755
   notify: restart sensu-client
+
+- name: Copy Custom Plugins
+  copy: src=../files dest=/etc/sensu/plugins owner=sensu group=sensu mode=0777 
 
 - name: Install load metrics
   get_url:
@@ -111,7 +107,6 @@
     mode=755
   notify: restart sensu-client
 
-
 - name: Install check-cmd plugin
   get_url:
     dest=/etc/sensu/plugins/check-cmd.rb
@@ -140,14 +135,12 @@
     mode=755
   notify: restart sensu-client
 
-
 - name: Install check-disk-capacity plugin
   get_url:
     dest=/etc/sensu/plugins/disk-capacity-metrics.rb
     url=https://raw.github.com/sensu/sensu-community-plugins/master/plugins/system/disk-capacity-metrics.rb
     mode=755
   notify: restart sensu-client
-
 
 - name: Install check-disk plugin
   get_url:
@@ -172,45 +165,6 @@
   template: src=check-seqware-sanger-jobs-duration.json.j2 dest=/etc/sensu/plugins/check-seqware-sanger-jobs-duration.sh mode=0755
   notify: restart sensu-client
 
-#- name: Copy over status checks
-#  copy: src={{ item }} dest=/etc/sensu/plugins/ mode=0755
-#  with_items:
-#     - check-gluster.sh
-#     - check-qstat.sh
-#     - check-seqware-failed.sh
-#     - check-sanger.sh
-#     - check-sge-running-steps.sh
-#     - check-hdfs.sh
-#  notify: restart sensu-client
-
-- name: Copy over checks for Worker node
-  copy: src={{ item }} dest=/etc/sensu/plugins/ mode=0755
-  with_items:
-     - check-docker-containers.sh
-  #These two checks should only go on worker nodes.
-  when: "'arch3-worker' in {{ subscriptions }}"
-  notify: restart sensu-client
-
-- name: Activate client services
-  service: name={{ item }} state=started enabled=yes
-  with_items:
-    - sensu-client
-
 #- name: Set up the oozie env variable
 #  copy: src=oozie.sh dest=/etc/profile.d/ mode=0755
 
-- name: Check if Seqware is installed on this machine
-  command: ls /home
-  register: home_output
-
-#- name: Copy over the script that restarts oozie in case is out-of-sync with SGE
-#  copy: src=test_oozie_sge.pl  dest=/mnt/home/seqware mode=0755
-#  when: home_output.stdout.find('seqware') != -1
-
-#- name: Creates a cron job that runs every 30 min and executes the oozie restart script
-#  cron: name="restart oozie" minute="*/30" hour="*" user=seqware job="perl /mnt/home/seqware/test_oozie_sge.pl > /dev/null"
-#  when: home_output.stdout.find('seqware') != -1
-
-- name: Add sensu user to docker group
-  user: name=sensu groups=docker
-  when: "'master' in group_names"

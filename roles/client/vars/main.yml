@@ -18,7 +18,7 @@ GNOSDownload: 3
 vcfUpload: 1
 
 # total_max_workflow_duration is the total duration allowed for a workflow, in DAYS
-total_max_workflow_duration: 8
+total_max_workflow_duration: 3
 
 # The values for individual steps in a workflow are specified in HOURS
 gtdownload: 4
@@ -29,7 +29,3 @@ upload: 3
 upload_rate_alert: 100
 download_rate_alert: 1000
 
-# Latest accession used in AWS
-#accession: 21
-workflow_version: SangerPancancerCgpCnIndelSnvStr
-#fleet_name: FLEET_NAME | default(lookup('env','FLEET_NAME'))

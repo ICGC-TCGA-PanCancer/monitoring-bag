@@ -1,3 +1,3 @@
-sudo cat /home/ubuntu/ini/runner.ran | grep 'echo "' | awk 'END{ print $2 }' | sed 's/"//g'
+#!/bin/bash
+cat /datastore/.worker/lastrun.ini 
 echo 0
-
