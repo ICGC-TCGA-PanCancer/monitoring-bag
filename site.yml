@@ -24,6 +24,7 @@
 - hosts: sensu-server
   sudo: True
   roles:
+    - { role: rvm_io.rvm1-ruby, tags: ruby, sudo: True }
     - { role: server-dependencies }
     - { role: base }
     - { role: server }
@@ -34,5 +35,6 @@
 - hosts: master:worker
   sudo: True
   roles:
+    - { role: rvm_io.rvm1-ruby, tags: ruby, sudo: True }
     - { role: base }
     - { role: client, subscriptions: "\"common\",\"compute\",\"docker\",\"arch3-worker\"" }

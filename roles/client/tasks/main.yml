@@ -29,13 +29,6 @@
   with_items:
   - build-essential
   - libpq-dev
-  - rubygems
-
-- name: Remove default Gem source HTTP
-  command: gem sources -r http://rubygems.org/
-
-- name: Add new Gem source HTTPS
-  command: gem sources -a https://rubygems.org/
 
 - name: Install sensu-plugin gem
   gem: name=sensu-plugin state=latest user_install=no
@@ -63,7 +56,7 @@
   notify: restart sensu-client
 
 - name: Copy Custom Plugins
-  copy: src=../files dest=/etc/sensu/plugins owner=sensu group=sensu mode=0777 
+  copy: src=../files/ dest=/etc/sensu/plugins owner=sensu group=sensu mode=0777 
 
 - name: Install load metrics
   get_url:
@@ -151,18 +144,6 @@
 
 - name: Template over check-seqware-running.sh
   template: src=check-seqware-running.json.j2 dest=/etc/sensu/plugins/check-seqware-running.sh mode=0755
-  notify: restart sensu-client
-
-- name: Template over check-seqware-jobs-duration.sh
-  template: src=check-seqware-jobs-duration.json.j2 dest=/etc/sensu/plugins/check-seqware-jobs-duration.sh mode=0755
-  notify: restart sensu-client
-
-- name: Template over check-seqware-sanger-last-workflow-status.sh
-  template: src=check-seqware-sanger-last-workflow-status.json.j2 dest=/etc/sensu/plugins/check-seqware-sanger-last-workflow-status.sh mode=0755
-  notify: restart sensu-client
-
-- name: Template over check-seqware-sanger-jobs-duration.sh
-  template: src=check-seqware-sanger-jobs-duration.json.j2 dest=/etc/sensu/plugins/check-seqware-sanger-jobs-duration.sh mode=0755
   notify: restart sensu-client
 
 #- name: Set up the oozie env variable

@@ -1,6 +1,11 @@
 monitoring-bag
 ==============
 
+
+I added this ruby role to handle ruby installs via ansible:
+https://github.com/rvm/rvm1-ansible
+
+
 The purpose of this playbook is to setup a Sensu server, Sensu clients and provision a gnostest key in the clients.
 Optionally (as explained in Stage 8) this playbook can be used to create a LVM volume using multiple ephemeral disks, format and mount it under "/mnt/seqware-oozie".
 

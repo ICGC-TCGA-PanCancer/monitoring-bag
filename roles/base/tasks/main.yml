@@ -1,11 +1,11 @@
 #base/taks/main/yml
 ---
-- name: Install RVM Key
-  shell: gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3
 
-- name: Install RVM
-  sudo: True
-  shell: sudo curl -L https://get.rvm.io | sudo bash -s stable --ruby --autolibs=enable --auto-dotfiles
+- name: Remove default Gem source HTTP
+  command: gem sources -r http://rubygems.org/
+
+- name: Add new Gem source HTTPS
+  command: gem sources -a https://rubygems.org/
 
 - name: Install RabbitMQ signing key
   apt_key: url=http://repos.sensuapp.org/apt/pubkey.gpg state=present

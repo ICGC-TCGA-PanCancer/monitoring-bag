@@ -66,47 +66,35 @@
       "subscribers": [ "deprecated" ],
       "interval": 60
     },
-    "docker-check": {
+    "orchestra-check": {
       "handlers":["default"],
-      "command":"/etc/sensu/plugins/check-docker-containers.sh",
+      "command":"/etc/sensu/plugins/orchestra_health.sh",
       "interval":60,
       "subscribers":["arch3-worker"]
     },
-    "rabbitmq-alive": {
+    "orchestra-busy": {
       "handlers":["default"],
-      "command":"check-rabbitmq-alive.rb -w localhost -u queue_user -p queue",
+      "command":"/etc/sensu/plugins/orchestra_busy.sh",
       "interval":60,
-      "subscribers":["arch3-launcher"]
+      "subscribers":["arch3-worker"]
     },
-    "postgres-alive": {
+    "orchestra-ini": {
       "handlers":["default"],
-      "command":"check-postgres-alive.rb -u queue_user -p queue -h localhost -d queue_status",
+      "command":"/etc/sensu/plugins/orchestra_ini.sh",
       "interval":60,
-      "subscribers":["arch3-launcher"]
+      "subscribers":["arch3-worker"]
     },
-    "arch3-worker-running": {
-      "handlers": ["default"],
-      "command": "check-process.rb -p java.*info.pancancer.arch3.worker.Worker -C 1 -c 1",
-      "interval": 60,
-      "subscribers": [ "arch3-worker" ]
+    "orchestra-runtime": {
+      "handlers":["default"],
+      "command":"/etc/sensu/plugins/orchestra_runtime.sh",
+      "interval":60,
+      "subscribers":["arch3-worker"]
     },
-    "arch3-coordinator-running": {
-      "handlers": ["default"],
-      "command": "check-process.rb -p java.*info.pancancer.arch3.coordinator.Coordinator -W 1 -w 1",
-      "interval": 60,
-      "subscribers": [ "arch3-launcher" ]
-    },
-    "arch3-provisioner-running": {
-      "handlers": ["default"],
-      "command": "check-process.rb -p java.*info.pancancer.arch3.containerProvisioner.ContainerProvisionerThreads -W 1 -w 1",
-      "interval": 60,
-      "subscribers": [ "arch3-launcher" ]
-    },
-    "arch3-slack-reporter-running": {
-      "handlers": ["default"],
-      "command": "check-process.rb -p java.*info.pancancer.arch3.reportbot.SlackReportBot -W 1 -w 1",
-      "interval": 60,
-      "subscribers": [ "arch3-launcher" ]
+    "orchestra-failed": {
+      "handlers":["default"],
+      "command":"/etc/sensu/plugins/orchestra_failed.sh",
+      "interval":60,
+      "subscribers":["arch3-worker"]
     }
   }
 }
