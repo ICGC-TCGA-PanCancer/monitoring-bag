@@ -101,12 +101,6 @@
       "command": "check-process.rb -p java.*info.pancancer.arch3.containerProvisioner.ContainerProvisionerThreads -W 1 -w 1",
       "interval": 60,
       "subscribers": [ "arch3-launcher" ]
-    },
-    "arch3-slack-reporter-running": {
-      "handlers": ["default"],
-      "command": "check-process.rb -p java.*info.pancancer.arch3.reportbot.SlackReportBot -W 1 -w 1",
-      "interval": 60,
-      "subscribers": [ "arch3-launcher" ]
     }
   }
 }
