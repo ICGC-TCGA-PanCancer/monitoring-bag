@@ -2,24 +2,15 @@
 set -e
 
 # Count all running containers
-running_containers=$(echo -e "GET /containers/json HTTP/1.0\r\n" | nc -U /var/run/docker.sock \
-    | tail -n +5                                                           \
-    | python -m json.tool                                                  \
-    | grep \"Id\"                                                          \
-    | wc -l)
+running_containers=$(echo $(($(docker ps | wc -l) - 1)))
+
 # Count all containers
-total_containers=$(echo -e "GET /containers/json?all=1 HTTP/1.0\r\n" | nc -U /var/run/docker.sock \
- | tail -n +5 \
- | python -m json.tool \
- | grep \"Id\" \
- | wc -l)
+total_containers=$(echo $(($(docker ps -a | wc -l) - 1)))
 
 # Count all images
-total_images=$(echo -e "GET /images/json HTTP/1.0\r\n" | nc -U /var/run/docker.sock \
- | tail -n +5 \
- | python -m json.tool \
- | grep \"Id\" \
- | wc -l)
+total_images=$(echo $(($(docker images | wc -l) - 1)))
+
+
 
 echo "docker.${HOSTNAME}.running_containers ${running_containers}"
 echo "docker.${HOSTNAME}.total_containers ${total_containers}"
