@@ -11,11 +11,12 @@
 - name: Template over Graphite relay config
   template: src=relay.json.j2 dest=/etc/sensu/conf.d/relay.json
   notify: restart sensu server services
-    
+  when: use_grafana
+
 - name: Template checks
   template: src=checks.json.j2 dest=/etc/sensu/conf.d/checks.json
   notify: restart sensu server services
-  
+
 - name: Disk usage metrics
   template: src=disk-usage-metrics.json.j2 dest=/etc/sensu/conf.d/disk-usage-metrics.json
   notify: restart sensu server services
@@ -46,6 +47,7 @@
 
 - name: Create the directory structure needed by the Graphite relay
   file: path=/etc/sensu/extensions/{{item}} owner=root group=root mode=0755 state=directory
+  when: use_grafana
   with_items:
     - mutators
     - handlers
@@ -53,7 +55,9 @@
 - name: Copy over relay.rb needed by Graphite data collection
   copy: src=relay.rb dest=/etc/sensu/extensions/handlers/relay.rb mode=0644
   notify: restart sensu server services
+  when: use_grafana
 
 - name: Copy over metrics.rb needed by Graphite data collection
   copy: src=metrics.rb dest=/etc/sensu/extensions/mutators/metrics.rb mode=0644
   notify: restart sensu server services
+  when: use_grafana
