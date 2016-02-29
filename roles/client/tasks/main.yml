@@ -48,6 +48,9 @@
   gem: name=sensu-plugin state=latest user_install=no
   when: ansible_distribution_release == "precise"
 
+- name: Install gem sys-filesystem
+  gem: name=sys-filesystem state=latest user_install=no
+
 - name: Install sensu plugins (and some of their dependencies)
   gem: name={{ item }} state=latest user_install=no
   with_items:

@@ -1,26 +1,9 @@
 {
   "checks": {
-    "cron_check": {
-      "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-procs.rb -p cron -C 1 ",
-      "interval": 60,
-      "subscribers": [ "deprecated" ]
-    },
-    "check-glusterfsd": {
-      "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-procs.rb -p glusterfsd -C 1 ",
-      "interval": 60,
-      "subscribers": [ "deprecated" ]
-    },
-    "check-glusterd": {
-      "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-procs.rb -p glusterd -C 1 ",
-      "interval": 60,
-      "subscribers": [ "deprecated" ]
-    },
+
     "free_memory_check": {
       "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-mem.sh -w 800 -c 500 ",
+      "command": "/etc/sensu/plugins/check-memory.sh -w 800 -c 500 ",
       "interval": 60,
       "subscribers": [ "common" ]
     },
@@ -31,40 +14,17 @@
       "occurrences": 3,
       "subscribers": [ "common" ]
     },
-    "check-disk-space": {
+    "check-disk-space-usage": {
       "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-disk.rb ",
+      "command": "/etc/sensu/plugins/check-disk-usage.rb -c 90 -w 75",
       "interval": 60,
-      "subscribers": [ "deprecated" ]
+      "subscribers": [ "common" ]
     },
-    "check-NFS": {
+    "disk-capacity": {
       "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-procs.rb -p nfsd4 -C 1 ",
+      "command": "metrics-disk-capacity.rb",
       "interval": 60,
-      "subscribers": [ "deprecated" ]
-    },
-    "gluster_peer_check": {
-      "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-gluster.sh",
-      "interval": 60,
-      "subscribers": [ "deprecated" ]
-    },
-    "check-qstat": {
-      "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-qstat.sh",
-      "interval": 60,
-      "subscribers": [ "deprecated" ]
-    },
-    "check-hdfs": {
-      "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-hdfs.sh",
-      "interval": 60,
-      "subscribers": [ "deprecated" ]
-    },
-    "gluster_check": {
-      "command": "ls /mnt/glusterfs/data/ICGC1/scratch/seqware_results/ && ls /mnt/glusterfs/data/ICGC2/seqware_results_icgc/completed/ && ls /mnt/glusterfs/data/ICGC3/seqware_results_icgc/completed/",
-      "subscribers": [ "deprecated" ],
-      "interval": 60
+      "subscribers": [ "common" ]
     },
     "docker-check": {
       "handlers":["default"],
