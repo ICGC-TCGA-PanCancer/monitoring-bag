@@ -12,21 +12,24 @@
       "command": "metrics-load.rb --per-core",
       "interval": 60,
       "occurrences": 3,
-      "subscribers": [ "common" ]
+      "subscribers": [ "common" ],
+      "handlers": ["relay"]
     },
     "iostat-metrics": {
       "handlers": ["default"],
       "command": "metrics-iostat-extended.rb",
       "interval": 60,
       "occurrences": 3,
-      "subscribers": [ "common" ]
+      "subscribers": [ "common" ],
+      "handlers": ["relay"]
     },
     "memory-metrics": {
       "handlers": ["default"],
       "command": "metrics-load.rb --per-core",
       "interval": 60,
       "occurrences": 3,
-      "subscribers": [ "common" ]
+      "subscribers": [ "common" ],
+      "handlers": ["relay"]
     },
     "cpu-load": {
       "handlers": ["default"],
@@ -39,7 +42,8 @@
       "handlers": ["default"],
       "command": "check-disk-usage.rb -c 90 -w 75",
       "interval": 60,
-      "subscribers": [ "common" ]
+      "subscribers": [ "common" ],
+      "handlers": ["relay"]
     },
     "disk-capacity": {
       "handlers": ["default"],
@@ -51,7 +55,8 @@
       "handlers":["default"],
       "command":"metrics-interface.rb",
       "interval":60,
-      "subscribers":["common"]
+      "subscribers":["common"],
+      "handlers": ["relay"]
     },
     "docker-check": {
       "handlers":["default"],
