@@ -1,22 +1,43 @@
+
 {
   "checks": {
-
-    "free_memory_check": {
+    "free-memory-check": {
       "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-memory.sh -w 800 -c 500 ",
+      "command": "check-ram.rb -c 80 -w 50 ",
       "interval": 60,
       "subscribers": [ "common" ]
     },
-    "cpu_load": {
+    "load-metrics": {
       "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-cpu.rb -w 90 -c 110 ",
+      "command": "metrics-load.rb --per-core",
+      "interval": 60,
+      "occurrences": 3,
+      "subscribers": [ "common" ]
+    },
+    "iostat-metrics": {
+      "handlers": ["default"],
+      "command": "metrics-iostat-extended.rb",
+      "interval": 60,
+      "occurrences": 3,
+      "subscribers": [ "common" ]
+    },
+    "memory-metrics": {
+      "handlers": ["default"],
+      "command": "metrics-load.rb --per-core",
+      "interval": 60,
+      "occurrences": 3,
+      "subscribers": [ "common" ]
+    },
+    "cpu-load": {
+      "handlers": ["default"],
+      "command": "check-cpu.rb -w 90 -c 110 ",
       "interval": 60,
       "occurrences": 3,
       "subscribers": [ "common" ]
     },
     "check-disk-space-usage": {
       "handlers": ["default"],
-      "command": "/etc/sensu/plugins/check-disk-usage.rb -c 90 -w 75",
+      "command": "check-disk-usage.rb -c 90 -w 75",
       "interval": 60,
       "subscribers": [ "common" ]
     },
