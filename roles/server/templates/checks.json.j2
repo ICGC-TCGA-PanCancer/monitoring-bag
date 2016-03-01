@@ -26,6 +26,12 @@
       "interval": 60,
       "subscribers": [ "common" ]
     },
+    "interface-check": {
+      "handlers":["default"],
+      "command":"metrics-interface.rb",
+      "interval":60,
+      "subscribers":["common"]
+    },
     "docker-check": {
       "handlers":["default"],
       "command":"/etc/sensu/plugins/check-docker-containers.sh",
