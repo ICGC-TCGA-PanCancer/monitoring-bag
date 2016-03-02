@@ -102,10 +102,6 @@
   with_items:
     - sensu-client
 
-- name: Check if Seqware is installed on this machine
-  command: ls /home
-  register: home_output
-
 - name: Add sensu user to docker group
   user: name=sensu groups=docker
   when: "'master' in group_names"
