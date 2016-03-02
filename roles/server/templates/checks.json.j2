@@ -1,7 +1,7 @@
 
 {
   "checks": {
-    "free-memory-check": {
+    "check-free-memory": {
       "handlers": ["default"],
       "command": "check-ram.rb -c 80 -w 50 ",
       "interval": 60,
@@ -25,13 +25,13 @@
     },
     "memory-metrics": {
       "handlers": ["default"],
-      "command": "metrics-load.rb --per-core",
+      "command": "metrics-memory.rb",
       "interval": 60,
       "occurrences": 3,
       "subscribers": [ "common" ],
       "handlers": ["relay"]
     },
-    "cpu-load": {
+    "check-cpu": {
       "handlers": ["default"],
       "command": "check-cpu.rb -w 90 -c 110 ",
       "interval": 60,
@@ -51,14 +51,14 @@
       "interval": 60,
       "subscribers": [ "common" ]
     },
-    "interface-check": {
+    "interface-metrics": {
       "handlers":["default"],
       "command":"metrics-interface.rb",
       "interval":60,
       "subscribers":["common"],
       "handlers": ["relay"]
     },
-    "docker-check": {
+    "check-docker": {
       "handlers":["default"],
       "command":"/etc/sensu/plugins/check-docker-containers.sh",
       "interval":60,
