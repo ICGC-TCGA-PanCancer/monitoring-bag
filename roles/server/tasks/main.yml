@@ -17,26 +17,6 @@
   template: src=checks.json.j2 dest=/etc/sensu/conf.d/checks.json
   notify: restart sensu server services
 
-- name: Disk usage metrics
-  template: src=disk-usage-metrics.json.j2 dest=/etc/sensu/conf.d/disk-usage-metrics.json
-  notify: restart sensu server services
-
-- name: CPU load metrics
-  template: src=load-metrics.json.j2 dest=/etc/sensu/conf.d/load-metrics.json
-  notify: restart sensu server services
-
-- name: Interface metrics
-  template: src=interface-metrics.json.j2 dest=/etc/sensu/conf.d/interface-metrics.json
-  notify: restart sensu server services
-
-- name: Memory usage metrics
-  template: src=memory-metrics.json.j2 dest=/etc/sensu/conf.d/memory-metrics.json
-  notify: restart sensu server services
-
-- name:  Iostat metrics
-  template: src=iostat-extended-metrics.json.j2 dest=/etc/sensu/conf.d/iostat-extended-metrics.json
-  notify: restart sensu server services
-
 - name: Ensure state of server services
   sudo: True
   service: name={{ item }} state=started enabled=yes
