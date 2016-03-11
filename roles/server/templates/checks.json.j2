@@ -1,37 +1,37 @@
-
 {
   "checks": {
-    "check-free-memory": {
+    "free-memory-check": {
       "handlers": ["default"],
       "command": "check-ram.rb -c 80 -w 50 ",
       "interval": 60,
       "subscribers": [ "common" ]
     },
     "load-metrics": {
-      "handlers": ["default"],
+      "handlers": ["relay"],
       "command": "metrics-load.rb --per-core",
+      "type":"metric",
       "interval": 60,
       "occurrences": 3,
-      "subscribers": [ "common" ],
-      "handlers": ["relay"]
+      "subscribers": [ "common" ]
     },
-    "iostat-metrics": {
-      "handlers": ["default"],
+    "iostat-metrics":
+    {
+      "handlers": ["relay"],
       "command": "metrics-iostat-extended.rb",
+      "type":"metric",
       "interval": 60,
       "occurrences": 3,
-      "subscribers": [ "common" ],
-      "handlers": ["relay"]
+      "subscribers": [ "common" ]
     },
     "memory-metrics": {
-      "handlers": ["default"],
-      "command": "metrics-memory.rb",
+      "handlers": ["relay"],
+      "command": "metrics-memory.rb ",
+      "type":"metric",
       "interval": 60,
       "occurrences": 3,
-      "subscribers": [ "common" ],
-      "handlers": ["relay"]
+      "subscribers": [ "common" ]
     },
-    "check-cpu": {
+    "cpu-load": {
       "handlers": ["default"],
       "command": "check-cpu.rb -w 90 -c 110 ",
       "interval": 60,
@@ -42,23 +42,24 @@
       "handlers": ["default"],
       "command": "check-disk-usage.rb -c 90 -w 75",
       "interval": 60,
-      "subscribers": [ "common" ],
-      "handlers": ["relay"]
+      "subscribers": [ "common" ]
     },
     "disk-usage-metrics": {
-      "handlers": ["default"],
+      "handlers": ["relay"],
+      "type":"metric",
       "command": "metrics-disk-usage.rb",
       "interval": 60,
       "subscribers": [ "common" ]
     },
-    "interface-metrics": {
-      "handlers":["default"],
+    "interface-check": {
+      "handlers":["relay"],
+      "type":"metric",
       "command":"metrics-interface.rb",
       "interval":60,
-      "subscribers":["common"],
-      "handlers": ["relay"]
+      "subscribers":["common"]
     },
-    "check-docker": {
+
+    "docker-check": {
       "handlers":["default"],
       "command":"/etc/sensu/plugins/check-docker-containers.sh",
       "interval":60,
