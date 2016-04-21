@@ -59,6 +59,7 @@
     - bundler
     - pg
     - rest_client
+    - sensu-plugins-vmstats
     - sensu-plugins-postgres
     - sensu-plugins-rabbitmq
     - sensu-plugins-disk-checks
@@ -71,6 +72,10 @@
     - sensu-plugins-cpu-checks
     - sensu-plugins-filesystem-checks
     - sensu-plugins-disk-checks
+  notify: restart sensu-client
+
+- name: setup vmstats for check-ram
+  shell: sudo /opt/sensu/embedded/bin/gem install vmstat --no-rdoc --no-ri
   notify: restart sensu-client
 
 - name: Template over check-seqware-running.sh
